@@ -6,7 +6,7 @@
 <!-- I would prefer to have an image linked to the loop project website but Doxygen markdown cannot do this -->
 <!-- In Doxygen 1.8.16 (released 9/8/2019) it might be possible -->
 ![Loop Project](loop_inv.png "Loop Project")
-<div align="center">[Loop Project Website](https://loop3d.org)</div>
+[Loop Project Website](https://loop3d.org)
 
 # What is Loop?
 The Loop platform is an open source 3D probabilistic geological and geophysical modelling platform, initiated by Geoscience Australia and the OneGeology consortium. The project is funded by Australian territory, State and Federal Geological Surveys, the Australian Research Council and the MinEx Collaborative Research Centre.
