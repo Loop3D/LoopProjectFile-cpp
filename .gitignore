@@ -1,0 +1,6 @@
+*.o
+libLoopProjectFileCpp.so
+testingLoopProjectFile
+html/
+latex/
+*.loop3d

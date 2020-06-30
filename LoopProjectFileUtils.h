@@ -1,8 +1,7 @@
 #ifndef __LOOPPROJECTFILEUTILS_H
 #define __LOOPPROJECTFILEUTILS_H
 
-
-#include <netcdf>
+#include <string>
 
 /*! \brief A structure for returning an error code and message for loop project files */
 struct LoopProjectFileResponse {
@@ -21,12 +20,7 @@ namespace LoopProjectFile {
  *
  * \return The created Loop Project File Response with error code and message
  */
-LoopProjectFileResponse createErrorMsg(int errorCode, std::string errorMsg, bool echo=true)
-{
-    if (echo) std::cout << errorMsg << std::endl;
-    LoopProjectFileResponse resp = {errorCode,errorMsg};
-    return resp;
-}
+LoopProjectFileResponse createErrorMsg(int errorCode, std::string errorMsg, bool echo=true);
 
 }; // namespace LoopProjectFile
 

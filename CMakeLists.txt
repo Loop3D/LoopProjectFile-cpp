@@ -1,6 +1,13 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(TestingLoopProjectFile)
+if(CMAKE_BUILD_TYPE MATCHES Debug)
+    set(LPF_LIBRARY_NAME LoopProjectFileCppD)
+else()
+    set(LPF_LIBRARY_NAME LoopProjectFileCpp)
+endif()
+set(LPF_TEST_PROG TestingLoopProjectFile)
+
+project(${LPF_TEST_PROG})
 
 set(HEADERS LoopProjectFile.h
             LoopProjectFileUtils.h
@@ -12,8 +19,19 @@ set(HEADERS LoopProjectFile.h
             LoopUncertaintyModels.h
             LoopVersion.h
             )
-
-add_executable(TestingLoopProjectFile testingLoopProjectFile.cpp)
+set(SRCS LoopProjectFile.cpp
+            LoopProjectFileUtils.cpp
+            LoopExtents.cpp
+            LoopDataCollection.cpp
+            LoopExtractedInformation.cpp
+            LoopGeophysicalModels.cpp
+            LoopStructuralModels.cpp
+            LoopUncertaintyModels.cpp
+            LoopVersion.cpp
+            )
+add_library(${LPF_LIBRARY_NAME} ${SRCS})
+add_executable(${LPF_TEST_PROG} testingLoopProjectFile.cpp)
+target_link_libraries(${LPF_TEST_PROG} ${LPF_LIBRARY_NAME})
 
 
 # Find netCDF dependancy
@@ -21,10 +39,10 @@ find_package(NetCDF REQUIRED)
 if (NetCDF_FOUND)
     message("NetCDF Found")
     include_directories(${NETCDF_INCLUDES})
-    target_link_libraries(TestingLoopProjectFile ${NETCDF_LIBRARIES})
-    target_link_libraries(TestingLoopProjectFile netcdf)
+    target_link_libraries(${LPF_TEST_PROG} ${NETCDF_LIBRARIES})
+    target_link_libraries(${LPF_TEST_PROG} netcdf)
     if (UNIX)
-        target_link_libraries(TestingLoopProjectFile netcdf netcdf_c++4)
+        target_link_libraries(${LPF_TEST_PROG} netcdf netcdf_c++4)
     endif(UNIX)
 else ()
     message("NetCDF NOT Found")
@@ -67,11 +85,13 @@ endif()
 # Setup installation
 
 if (WIN32)
-    install(TARGETS TestingLoopProjectFile DESTINATION "LoopProjectFile-cpp/")
+    install(TARGETS ${LPF_TEST_PROG} DESTINATION "LoopProjectFile-cpp/")
+    install(TARGETS ${LPF_LIBRARY_NAME} DESTINATION "LoopProjectFile-cpp/")
     install(FILES ${HEADERS} DESTINATION "LoopProjectFile-cpp/")
 endif()
 if (UNIX)
-    install(TARGETS TestingLoopProjectFile DESTINATION "bin")
+    install(TARGETS ${LPF_TEST_PROG} DESTINATION "bin")
+    install(TARGETS ${LPF_LIBRARY_NAME} DESTINATION "lib")
     install(FILES ${HEADERS} DESTINATION "include/LoopProjectFile-cpp/")
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doxygen/html DESTINATION "share/LoopProjectFile-cpp/")
     install(FILES loop_inv.png DESTINATION "share/LoopProjectFile-cpp/html/")
