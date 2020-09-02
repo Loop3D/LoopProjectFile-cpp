@@ -84,6 +84,7 @@ bool testLoopProjectFileFunctions(void)
     // Check that those fault observations are in the file
     faultObservations.clear();
     resp = LoopProjectFile::GetFaultObservations(filename,faultObservations,true);
+    if (resp.errorCode) std::cout << resp.errorMessage << std::endl;
     errors += resp.errorCode;
     for (auto i=0; i<faultObservations.size(); i++) {
         std::cout << "Fault Obs northing = " << faultObservations[i].northing << std::endl;
@@ -99,11 +100,13 @@ bool testLoopProjectFileFunctions(void)
         foldObservations.push_back(foldObs);
     }
     resp = LoopProjectFile::SetFoldObservations(filename,foldObservations,true);
+    if (resp.errorCode) std::cout << resp.errorMessage << std::endl;
     errors += resp.errorCode;
 
     // And check those fold observations
     foldObservations.clear();
     resp = LoopProjectFile::GetFoldObservations(filename,foldObservations,true);
+    if (resp.errorCode) std::cout << resp.errorMessage << std::endl;
     errors += resp.errorCode;
     for (auto i=0; i<foldObservations.size(); i++) {
         std::cout << "Fold Obs northing = " << foldObservations[i].northing << std::endl;
@@ -121,17 +124,19 @@ bool testLoopProjectFileFunctions(void)
         faultEvents.push_back(faultEvent);
     }
     for (auto it=faultEvents.begin(); it!=faultEvents.end(); it++) {
-        std::cout << "Initial Fault Event name = " << it->name << std::endl;
+        std::cout << "Initial Fault Event (ID: " << it->eventId << ") name = " << it->name << std::endl;
     }
     resp = LoopProjectFile::SetFaultEvents(filename,faultEvents,true);
+    if (resp.errorCode) std::cout << resp.errorMessage << std::endl;
     errors += resp.errorCode;
 
     // Check there are there
     faultEvents.clear();
     resp = LoopProjectFile::GetFaultEvents(filename,faultEvents,true);
+    if (resp.errorCode) std::cout << resp.errorMessage << std::endl;
     errors += resp.errorCode;
     for (auto it=faultEvents.begin(); it!=faultEvents.end(); it++) {
-        std::cout << "Fault Event name = " << it->name << std::endl;
+        std::cout << "Fault Event (ID: " << it->eventId << ") name = " << it->name << std::endl;
     }
 
     // Create data shape from extents above and some fake structural data

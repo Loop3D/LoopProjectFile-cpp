@@ -7,34 +7,49 @@
 
 namespace LoopProjectFile {
 
-/*! \brief A structure describing a fault event */
-struct FaultEvent {
+enum EventType {
+    INVALIDEVENT = -1,
+    FAULTEVENT,
+    FOLDEVENT,
+    FOLIATIONEVENT,
+    DISCONTINUITYEVENT,
+    NUM_EVENT_TYPES
+};
+
+/*! \brief A structure describing a generic event */
+struct Event {
     int eventId; /*!< A unique event identifier (unique to all events types) */
     /*!@{ Limits on the age of the event (arbitrary units) */
     double minAge;
     double maxAge;
     /*!@}*/
-    double avgDisplacement; /*!< The calculated average displacement across the fault (metres) */
-    char enabled; /*!< A flag to enable/disable this event from modelling calculations */
     char name[LOOP_NAME_LENGTH]; /*!< The name of this event */
+    char enabled; /*!< A flag to enable/disable this event from modelling calculations */
+    int rank; /*!< A placeholder for permutation calculations */
+    EventType type;
     /*! Constructor. Zeros all values */
-    FaultEvent() {
+    Event() {
+        type = INVALIDEVENT;
         eventId = 0;
         minAge = 0;
         maxAge = 0;
-        avgDisplacement = 0;
         enabled = 0;
         for (auto i=0;i<LOOP_NAME_LENGTH;i++) name[i] = 0;
     }
 };
 
+/*! \brief A structure describing a fault event */
+struct FaultEvent : public Event {
+    double avgDisplacement; /*!< The calculated average displacement across the fault (metres) */
+    /*! Constructor. Zeros all values */
+    FaultEvent() : Event() {
+        type = FAULTEVENT;
+        avgDisplacement = 0;
+    }
+};
+
 /*! \brief A structure describing a fold event */
-struct FoldEvent {
-    int eventId; /*!<A unique event identifier (unique to all events types) */
-    /*!@{ Limits on the age of the event (arbitrary units) */
-    double minAge;
-    double maxAge;
-    /*!@}*/
+struct FoldEvent : public Event {
     char periodic; /*!< A flag indicating whether the fold is repeated */
     double wavelength; /*!< The wavelength of the fold (metres) */
     double amplitude; /*!< The amplitude of the fold (metres) */
@@ -42,13 +57,9 @@ struct FoldEvent {
     double asymmetryShift; /*!< The ratio of the asymmetry */
     double secondaryWavelength; /*!< The wavelength of the parasitic fold (metres) */
     double secondaryAmplitude; /*!< The amplitude of the parasitic fold (metres) */
-    char enabled; /*!< A flag to enable/disable this event from modelling calculations */
-    char name[LOOP_NAME_LENGTH]; /*!< The name of this event */
     /*! Constructor. Zeros all values */
-    FoldEvent() {
-        eventId = 0;
-        minAge = 0;
-        maxAge = 0;
+    FoldEvent() : Event() {
+        type = FOLDEVENT;
         periodic = 0;
         wavelength = 0;
         amplitude = 0;
@@ -56,54 +67,30 @@ struct FoldEvent {
         asymmetryShift = 0;
         secondaryWavelength = 0;
         secondaryAmplitude = 0;
-        enabled = 0;
-        for (auto i=0;i<LOOP_NAME_LENGTH;i++) name[i] = 0;
     }
 };
 
 /*! \brief A structure describing a foliation event */
-struct FoliationEvent {
-    int eventId; /*!< A unique event identifier (unique to all events types) */
-    /*!@{ Limits on the age of the event (arbitrary units) */
-    double minAge;
-    double maxAge;
-    /*!@}*/
+struct FoliationEvent : public Event {
     /*!@{ The limits of the foliation event in depth on the stratigraphic log */
     double lowerScalarValue;
     double upperScalarValue;
     /*!@}*/
-    char enabled; /*!< A flag to enable/disable this event from modelling calculations */
-    char name[LOOP_NAME_LENGTH]; /*!< The name of this event */
     /*! Constructor. Zeros all values */
-    FoliationEvent() {
-        eventId = 0;
-        minAge = 0;
-        maxAge = 0;
+    FoliationEvent() : Event() {
+        type = FOLIATIONEVENT;
         lowerScalarValue = 0;
         upperScalarValue = 0;
-        enabled = 0;
-        for (auto i=0;i<LOOP_NAME_LENGTH;i++) name[i] = 0;
     }
 };
 
 /*! \brief A structure describing a discontinuity event */
-struct DiscontinuityEvent {
-    int eventId; /*!<A unique event identifier (unique to all events types) */
-    /*!@{ Limits on the age of the event (arbitrary units) */
-    double minAge;
-    double maxAge;
-    /*!@}*/
+struct DiscontinuityEvent : public Event {
     double scalarValue; /*!< The depth of the discontinuity event on the stratigraphic log */
-    char enabled; /*!< A flag to enable/disable this event from modelling calculations */
-    char name[LOOP_NAME_LENGTH]; /*!< The name of this event */
     /*! Constructor. Zeros all values */
-    DiscontinuityEvent() {
-        eventId = 0;
-        minAge = 0;
-        maxAge = 0;
+    DiscontinuityEvent() : Event() {
+        type = DISCONTINUITYEVENT;
         scalarValue = 0;
-        enabled = 0;
-        for (auto i=0;i<LOOP_NAME_LENGTH;i++) name[i] = 0;
     }
 };
 

@@ -12,25 +12,42 @@
 
 namespace LoopProjectFile {
 
-/*! \brief A structure describing a single fault observation */
-struct FaultObservation {
+enum ObservationType {
+    INVALIDOBSERVATION = -1,
+    FAULTOBSERVATION,
+    FOLDOBSERVATION,
+    FOLIATIONOBSERVATION,
+    DISCONTINUITYOBSERVATION,
+    NUM_OBSERVATION_TYPES
+};
+/*! \brief A structure describing a generic observation */
+struct Observation {
     int eventId; /*!< The event identifier of the event that this observation belongs to */
     /*! @{ The location of this observation in UTM coordinates (metres) */
     double easting;
     double northing;
     double altitude;
     /*!@}*/
+    ObservationType type;
+    Observation() {
+        type = INVALIDOBSERVATION;
+        eventId = 0;
+        easting = 0;
+        northing = 0;
+        altitude = 0;
+    }
+};
+
+/*! \brief A structure describing a single fault observation */
+struct FaultObservation : public Observation {
     double dipdir; /*!< The compass direction of the observed fault dip (degrees) */
     double dip; /*!< The angle of the observed fault dip 0=horizontal 90=vertical down (degrees) */
     double dipPolarity; /*!< The dipPolarity of the dip 0=normal 1=inverted */
     double val; /*!< The calculated depth on the stratigraphic column of the observation (metres) */
     double displacement; /*!< The displacement of the fault at this observation */
     /*! Contructor. Zeros all variables */
-    FaultObservation() {
-        eventId = 0;
-        easting = 0;
-        northing = 0;
-        altitude = 0;
+    FaultObservation() : Observation() {
+        type = FAULTOBSERVATION;
         dipdir = 0;
         dip = 0;
         dipPolarity = 0;
@@ -40,13 +57,7 @@ struct FaultObservation {
 };
 
 /*! \brief A structure describing a single fold observation */
-struct FoldObservation {
-    int eventId; /*!< The event identifier of the event that this observation belongs to */
-    /*! @{ The location of this observation in UTM coordinates (metres) */
-    double easting;
-    double northing;
-    double altitude;
-    /*!@}*/
+struct FoldObservation : public Observation {
     /*! @{ The 3D vector of the observed fold axis in XYZ (arbitrary units) */
     double axisX;
     double axisY;
@@ -55,11 +66,8 @@ struct FoldObservation {
     char foliation[LOOP_FOLIATION_NAME_LENGTH]; /*!< The name of the most recent proceeding foliation event that is folded */
     char whatIsFolded[LOOP_WHAT_IS_FOLDED_NAME_LENGTH]; /*!< The name of the most recent proceeding fold event (if any) that is folded */
     /*! Contructor. Zeros all variables */ 
-    FoldObservation() {
-        eventId = 0;
-        easting = 0;
-        northing = 0;
-        altitude = 0;
+    FoldObservation() : Observation() {
+        type = FOLDOBSERVATION;
         axisX = 0;
         axisY = 0;
         axisZ = 0;
@@ -70,38 +78,24 @@ struct FoldObservation {
 };
 
 /*! \brief A structure describing a single foliation observation */
-struct FoliationObservation {
-    int eventId; /*!< The event identifier of the event that this observation belongs to */
-    /*! @{ The location of this observation in UTM coordinates (metres) */
-    double easting;
-    double northing;
-    double altitude;
-    /*!@}*/
+struct FoliationObservation : public Observation {
     double dipdir; /*!< The compass direction of the observed foliation dip (degrees) */
     double dip; /*!< The angle of the observed foliation dip 0=horizontal 90=vertical down (degrees) */
     /*! Contructor. Zeros all variables */
-    FoliationObservation() {
-        eventId = 0;
-        easting = 0;
-        northing = 0;
-        altitude = 0;
+    FoliationObservation() : Observation() {
+        type = FOLIATIONOBSERVATION;
         dipdir = 0;
         dip = 0;
     }
 };
 
 /*! \brief A structure describing a single discontinuity observation */
-struct DiscontinuityObservation {
-    int eventId; /*!< The event identifier of the event that this observation belongs to */
-    /*! @{ The location of this observation in UTM coordinates (metres) */
-    double easting;
-    double northing;
-    double altitude;
-    /*!@}*/
+struct DiscontinuityObservation : public Observation {
     double dipdir; /*!< The compass direction of the observed discontinuity dip (degrees) */
     double dip; /*!< The angle of the observed discontinuity dip 0=horizontal 90=vertical down (degrees) */
     /*! Contructor. Zeros all variables */
-    DiscontinuityObservation() {
+    DiscontinuityObservation() : Observation() {
+        type = DISCONTINUITYOBSERVATION;
         eventId = 0;
         easting = 0;
         northing = 0;

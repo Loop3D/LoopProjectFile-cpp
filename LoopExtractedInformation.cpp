@@ -31,9 +31,9 @@ LoopProjectFileResponse ExtractedInformation::CreateExtractedInformationGroup(ne
         faultEventType.addMember("eventId",netCDF::ncInt,offsetof(FaultEvent, eventId));
         faultEventType.addMember("minAge",netCDF::ncDouble,offsetof(FaultEvent, minAge));
         faultEventType.addMember("maxAge",netCDF::ncDouble,offsetof(FaultEvent, maxAge));
-        faultEventType.addMember("avgDisplacement",netCDF::ncDouble,offsetof(FaultEvent, avgDisplacement));
-        faultEventType.addMember("enabled",netCDF::ncChar,offsetof(FaultEvent, enabled));
         faultEventType.addMember("name",netCDF::ncChar,offsetof(FaultEvent, name),length);
+        faultEventType.addMember("enabled",netCDF::ncChar,offsetof(FaultEvent, enabled));
+        faultEventType.addMember("avgDisplacement",netCDF::ncDouble,offsetof(FaultEvent, avgDisplacement));
         eventLogGroup.addVar("faultEvents",faultEventType,faultEventIndex);
 
         // Create fold observation compound type and variable
@@ -41,6 +41,8 @@ LoopProjectFileResponse ExtractedInformation::CreateExtractedInformationGroup(ne
         foldEventType.addMember("eventId",netCDF::ncInt,offsetof(FoldEvent, eventId));
         foldEventType.addMember("minAge",netCDF::ncDouble,offsetof(FoldEvent, minAge));
         foldEventType.addMember("maxAge",netCDF::ncDouble,offsetof(FoldEvent, maxAge));
+        foldEventType.addMember("name",netCDF::ncChar,offsetof(FoldEvent, name),length);
+        foldEventType.addMember("enabled",netCDF::ncChar,offsetof(FoldEvent, enabled));
         foldEventType.addMember("periodic",netCDF::ncChar,offsetof(FoldEvent, periodic));
         foldEventType.addMember("wavelength",netCDF::ncDouble,offsetof(FoldEvent, wavelength));
         foldEventType.addMember("amplitude",netCDF::ncDouble,offsetof(FoldEvent, amplitude));
@@ -48,8 +50,6 @@ LoopProjectFileResponse ExtractedInformation::CreateExtractedInformationGroup(ne
         foldEventType.addMember("asymmetryShift",netCDF::ncDouble,offsetof(FoldEvent, asymmetryShift));
         foldEventType.addMember("secondaryWavelength",netCDF::ncDouble,offsetof(FoldEvent, secondaryWavelength));
         foldEventType.addMember("secondaryAmplitude",netCDF::ncDouble,offsetof(FoldEvent, secondaryAmplitude));
-        foldEventType.addMember("enabled",netCDF::ncChar,offsetof(FoldEvent, enabled));
-        foldEventType.addMember("name",netCDF::ncChar,offsetof(FoldEvent, name),length);
         eventLogGroup.addVar("foldEvents",foldEventType,foldEventIndex);
 
         // Create fold observation compound type and variable
@@ -57,10 +57,10 @@ LoopProjectFileResponse ExtractedInformation::CreateExtractedInformationGroup(ne
         foliationEventType.addMember("eventId",netCDF::ncInt,offsetof(FoliationEvent, eventId));
         foliationEventType.addMember("minAge",netCDF::ncDouble,offsetof(FoliationEvent, minAge));
         foliationEventType.addMember("maxAge",netCDF::ncDouble,offsetof(FoliationEvent, maxAge));
+        foliationEventType.addMember("name",netCDF::ncChar,offsetof(FoliationEvent, name),length);
+        foliationEventType.addMember("enabled",netCDF::ncChar,offsetof(FoliationEvent, enabled));
         foliationEventType.addMember("lowerScalarValue",netCDF::ncDouble,offsetof(FoliationEvent, lowerScalarValue));
         foliationEventType.addMember("upperScalarValue",netCDF::ncDouble,offsetof(FoliationEvent, upperScalarValue));
-        foliationEventType.addMember("enabled",netCDF::ncChar,offsetof(FoliationEvent, enabled));
-        foliationEventType.addMember("name",netCDF::ncChar,offsetof(FoliationEvent, name),length);
         eventLogGroup.addVar("foliationEvents",foliationEventType,foliationEventIndex);
 
         // Create discontinuity observation compound type and variable
@@ -68,9 +68,9 @@ LoopProjectFileResponse ExtractedInformation::CreateExtractedInformationGroup(ne
         discontinuityEventType.addMember("eventId",netCDF::ncInt,offsetof(DiscontinuityEvent, eventId));
         discontinuityEventType.addMember("minAge",netCDF::ncDouble,offsetof(DiscontinuityEvent, minAge));
         discontinuityEventType.addMember("maxAge",netCDF::ncDouble,offsetof(DiscontinuityEvent, maxAge));
-        discontinuityEventType.addMember("scalarValue",netCDF::ncDouble,offsetof(DiscontinuityEvent, scalarValue));
-        discontinuityEventType.addMember("enabled",netCDF::ncChar,offsetof(DiscontinuityEvent, enabled));
         discontinuityEventType.addMember("name",netCDF::ncChar,offsetof(DiscontinuityEvent, name),length);
+        discontinuityEventType.addMember("enabled",netCDF::ncChar,offsetof(DiscontinuityEvent, enabled));
+        discontinuityEventType.addMember("scalarValue",netCDF::ncDouble,offsetof(DiscontinuityEvent, scalarValue));
         eventLogGroup.addVar("discontinuityEvents",discontinuityEventType,discontinuityEventIndex);
     } catch (netCDF::exceptions::NcException& e) {
         if (verbose) std::cout << e.what() << std::endl;
