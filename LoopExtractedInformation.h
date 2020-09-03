@@ -13,6 +13,7 @@ enum EventType {
     FOLDEVENT,
     FOLIATIONEVENT,
     DISCONTINUITYEVENT,
+    STRATIGRAPHICLAYER,
     NUM_EVENT_TYPES
 };
 
@@ -94,6 +95,27 @@ struct DiscontinuityEvent : public Event {
     }
 };
 
+/*! \brief A structure describing a stratigraphic layer */
+struct StratigraphicLayer : public Event {
+    double thickness; /*!< The average thickness of the layer */
+    /*!@{ RGB colour values for the top and bottom of the layer */
+    char colour1Red;
+    char colour1Green;
+    char colour1Blue;
+    char colour2Red;
+    char colour2Green;
+    char colour2Blue;
+    /*!@}*/
+
+    /*! Constructor. Zeros all values */
+    StratigraphicLayer() : Event() {
+        type = STRATIGRAPHICLAYER;
+        thickness = 0;
+        colour1Red = colour1Green = colour1Blue = 0;
+        colour2Red = colour2Green = colour2Blue = 0;
+    }
+};
+
 namespace ExtractedInformation {
 
 /*! 
@@ -162,10 +184,21 @@ LoopProjectFileResponse GetFoliationEvents(netCDF::NcGroup* rootNode, std::vecto
 LoopProjectFileResponse GetDiscontinuityEvents(netCDF::NcGroup* rootNode, std::vector<DiscontinuityEvent>& events, bool verbose=false);
 
 /*!
+ * \brief Retrieves stratigraphic layer information from the loop project file
+ *
+ * \param rootNode - the rootNode of the netCDF Loop project file
+ * \param layers - a reference to where the layer data is to be copied
+ * \param verbose - a flag to toggle verbose message printing
+ *
+ * \return Response with success/fail of event information retrieval with an error message if it failed
+ */
+LoopProjectFileResponse GetStratigraphicLayers(netCDF::NcGroup* rootNode, std::vector<StratigraphicLayer>& layers, bool verbose=false);
+
+/*!
  * \brief Sets fault event information to the loop project file
  *
  * \param rootNode - the rootNode of the netCDF Loop project file
- * \param events - the event data is to be inserted 
+ * \param events - the event data to be inserted 
  * \param verbose - a flag to toggle verbose message printing
  *
  * \return Response with success/fail of event information insertion with an error message if it failed
@@ -176,7 +209,7 @@ LoopProjectFileResponse SetFaultEvents(netCDF::NcGroup* rootNode, std::vector<Fa
  * \brief Sets fold event information to the loop project file
  *
  * \param rootNode - the rootNode of the netCDF Loop project file
- * \param events - the event data is to be inserted 
+ * \param events - the event data to be inserted 
  * \param verbose - a flag to toggle verbose message printing
  *
  * \return Response with success/fail of event information insertion with an error message if it failed
@@ -187,7 +220,7 @@ LoopProjectFileResponse SetFoldEvents(netCDF::NcGroup* rootNode, std::vector<Fol
  * \brief Sets foliation event information to the loop project file
  *
  * \param rootNode - the rootNode of the netCDF Loop project file
- * \param events - the event data is to be inserted 
+ * \param events - the event data to be inserted 
  * \param verbose - a flag to toggle verbose message printing
  *
  * \return Response with success/fail of event information insertion with an error message if it failed
@@ -198,12 +231,23 @@ LoopProjectFileResponse SetFoliationEvents(netCDF::NcGroup* rootNode, std::vecto
  * \brief Sets discontinuity event information to the loop project file
  *
  * \param rootNode - the rootNode of the netCDF Loop project file
- * \param events - the event data is to be inserted 
+ * \param events - the event data to be inserted 
  * \param verbose - a flag to toggle verbose message printing
  *
  * \return Response with success/fail of event information insertion with an error message if it failed
  */
 LoopProjectFileResponse SetDiscontinuityEvents(netCDF::NcGroup* rootNode, std::vector<DiscontinuityEvent> events, bool verbose=false);
+
+/*!
+ * \brief Sets stratigraphic log information in the loop project file
+ *
+ * \param rootNode - the rootNode of the netCDF Loop project file
+ * \param layers - the stratigraphic layer data to be inserted 
+ * \param verbose - a flag to toggle verbose message printing
+ *
+ * \return Response with success/fail of event information insertion with an error message if it failed
+ */
+LoopProjectFileResponse SetStratigraphicLayers(netCDF::NcGroup* rootNode, std::vector<StratigraphicLayer> layers, bool verbose=false);
 
 } // namespace ExtractedInformation
 } // namespace LoopProjectFile

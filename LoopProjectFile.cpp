@@ -167,6 +167,11 @@ LoopProjectFileResponse GetDiscontinuityEvents(std::string filename, std::vector
     LPF_OPEN_RUN(filename, ExtractedInformation::GetDiscontinuityEvents, data, true, verbose);
 }
 
+LoopProjectFileResponse GetStratigraphicLayers(std::string filename, std::vector<StratigraphicLayer> &data, bool verbose)
+{
+    LPF_OPEN_RUN(filename, ExtractedInformation::GetStratigraphicLayers, data, true, verbose);
+}
+
 LoopProjectFileResponse GetStructuralModel(std::string filename, std::vector<float> &data, std::vector<int> &dataShape, int index, bool verbose)
 {
     LPF_OPEN_RUN_WITH_SHAPE(filename, StructuralModels::GetStructuralModel, data, dataShape, index, true, verbose);
@@ -221,9 +226,15 @@ LoopProjectFileResponse SetFoliationEvents(std::string filename, std::vector<Fol
 {
     LPF_OPEN_RUN(filename, ExtractedInformation::SetFoliationEvents, data, false, verbose);
 }
+
 LoopProjectFileResponse SetDiscontinuityEvents(std::string filename, std::vector<DiscontinuityEvent> data, bool verbose)
 {
     LPF_OPEN_RUN(filename, ExtractedInformation::SetDiscontinuityEvents, data, false, verbose);
+}
+
+LoopProjectFileResponse SetStratigraphicLayers(std::string filename, std::vector<StratigraphicLayer> data, bool verbose)
+{
+    LPF_OPEN_RUN(filename, ExtractedInformation::SetStratigraphicLayers, data, false, verbose);
 }
 
 LoopProjectFileResponse SetStructuralModel(std::string filename, std::vector<float> data, std::vector<int> dataShape, int index, bool verbose)

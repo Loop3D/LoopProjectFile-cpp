@@ -76,7 +76,8 @@ LoopProjectFileResponse SetVersion(std::string filename, bool verbose=false);
  */
 LoopVersion GetVersion(std::string filename, bool verbose=false);
 
-// Getters for Extents/Observation/Events/Models
+// Getters for Extents/Observation/Events/Layers/Models
+
 /*! @{
  * \brief Retrieves specified data from the loop project file
  *
@@ -95,6 +96,7 @@ LoopProjectFileResponse GetFaultEvents(std::string filename, std::vector<FaultEv
 LoopProjectFileResponse GetFoldEvents(std::string filename, std::vector<FoldEvent> &data, bool verbose=false);
 LoopProjectFileResponse GetFoliationEvents(std::string filename, std::vector<FoliationEvent> &data, bool verbose=false);
 LoopProjectFileResponse GetDiscontinuityEvents(std::string filename, std::vector<DiscontinuityEvent> &data, bool verbose=false);
+LoopProjectFileResponse GetStratigraphicLayers(std::string filename, std::vector<StratigraphicLayer> &data, bool verbose=false);
 /*!@}*/
 
 /*! @{
@@ -113,7 +115,7 @@ LoopProjectFileResponse GetGeophysicalModel(std::string filename, std::vector<fl
 LoopProjectFileResponse GetUncertaintyModel(std::string filename, std::vector<float> &data, std::vector<int> &dataShape, int index, bool verbose=false);
 /*!@}*/
 
-// Setters for Extents/Observation/Events/Models
+// Setters for Extents/Observation/Events/Layers/Models
 
 /*! @{
  * \brief Adds or overrides specified data to the loop project file
@@ -132,6 +134,7 @@ LoopProjectFileResponse SetDiscontinuityObservations(std::string filename, std::
 LoopProjectFileResponse SetFaultEvents(std::string filename, std::vector<FaultEvent> data, bool verbose=false);
 LoopProjectFileResponse SetFoldEvents(std::string filename, std::vector<FoldEvent> data, bool verbose=false);
 LoopProjectFileResponse SetFoliationEvents(std::string filename, std::vector<FoliationEvent> data, bool verbose=false);
+LoopProjectFileResponse SetStratigraphicLayers(std::string filename, std::vector<StratigraphicLayer> data, bool verbose=false);
 /*!@}*/
 
 /*! @{
