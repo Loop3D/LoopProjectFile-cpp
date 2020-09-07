@@ -21,13 +21,15 @@ LoopProjectFileResponse DataCollection::CreateObservationGroup(netCDF::NcGroup* 
     LoopProjectFileResponse resp = {0,""};
     std::vector<int> foliationNameLength; foliationNameLength.push_back(LOOP_FOLIATION_NAME_LENGTH);
     std::vector<int> whatIsFoldedLength; whatIsFoldedLength.push_back(LOOP_FOLIATION_NAME_LENGTH);
+    std::vector<int> loopNameLength; loopNameLength.push_back(LOOP_NAME_LENGTH);
     try {
         dataCollectionGroup->addGroup("Observations");
         netCDF::NcGroup observationGroup = dataCollectionGroup->getGroup("Observations");
-        netCDF::NcDim faultIndex = observationGroup.addDim("faultIndex");
-        netCDF::NcDim foldIndex = observationGroup.addDim("foldIndex");
-        netCDF::NcDim foliationIndex = observationGroup.addDim("foliationIndex");
-        netCDF::NcDim discontinuityIndex = observationGroup.addDim("discontinuityIndex");
+        netCDF::NcDim faultIndex = observationGroup.addDim("faultObservationIndex");
+        netCDF::NcDim foldIndex = observationGroup.addDim("foldObservationIndex");
+        netCDF::NcDim foliationIndex = observationGroup.addDim("foliationObservationIndex");
+        netCDF::NcDim discontinuityIndex = observationGroup.addDim("discontinuityObservationIndex");
+        netCDF::NcDim stratigraphicIndex = observationGroup.addDim("stratigraphicObservationIndex");
 
         // Create fault observation compound type and variable
         netCDF::NcCompoundType faultObservationType = observationGroup.addCompoundType("faultObservation",sizeof(FaultObservation));
@@ -62,7 +64,7 @@ LoopProjectFileResponse DataCollection::CreateObservationGroup(netCDF::NcGroup* 
         foliationObservationType.addMember("northing",netCDF::ncDouble,offsetof(FoliationObservation, northing));
         foliationObservationType.addMember("altitude",netCDF::ncDouble,offsetof(FoliationObservation, altitude));
         foliationObservationType.addMember("dipdir",netCDF::ncDouble,offsetof(FoliationObservation, dipdir));
-        foliationObservationType.addMember("dir",netCDF::ncDouble,offsetof(FoliationObservation, dip));
+        foliationObservationType.addMember("dip",netCDF::ncDouble,offsetof(FoliationObservation, dip));
         observationGroup.addVar("foliationObservations",foliationObservationType,foliationIndex);
 
         // Create discontinuity observation compound type and variable
@@ -72,8 +74,20 @@ LoopProjectFileResponse DataCollection::CreateObservationGroup(netCDF::NcGroup* 
         discontinuityObservationType.addMember("northing",netCDF::ncDouble,offsetof(DiscontinuityObservation, northing));
         discontinuityObservationType.addMember("altitude",netCDF::ncDouble,offsetof(DiscontinuityObservation, altitude));
         discontinuityObservationType.addMember("dipdir",netCDF::ncDouble,offsetof(DiscontinuityObservation, dipdir));
-        discontinuityObservationType.addMember("dir",netCDF::ncDouble,offsetof(DiscontinuityObservation, dip));
+        discontinuityObservationType.addMember("dip",netCDF::ncDouble,offsetof(DiscontinuityObservation, dip));
         observationGroup.addVar("discontinuityObservations",discontinuityObservationType,discontinuityIndex);
+
+        // Create stratigraphic observation compound type and variable
+        netCDF::NcCompoundType stratigraphicObservationType = observationGroup.addCompoundType("stratigraphicObservation",sizeof(StratigraphicObservation));
+        stratigraphicObservationType.addMember("eventId",netCDF::ncInt,offsetof(StratigraphicObservation, eventId));
+        stratigraphicObservationType.addMember("easting",netCDF::ncDouble,offsetof(StratigraphicObservation, easting));
+        stratigraphicObservationType.addMember("northing",netCDF::ncDouble,offsetof(StratigraphicObservation, northing));
+        stratigraphicObservationType.addMember("altitude",netCDF::ncDouble,offsetof(StratigraphicObservation, altitude));
+        stratigraphicObservationType.addMember("dipdir",netCDF::ncDouble,offsetof(StratigraphicObservation, dipdir));
+        stratigraphicObservationType.addMember("dip",netCDF::ncDouble,offsetof(StratigraphicObservation, dip));
+        stratigraphicObservationType.addMember("dipPolarity",netCDF::ncDouble,offsetof(StratigraphicObservation, dipPolarity));
+        stratigraphicObservationType.addMember("layer",netCDF::ncChar,offsetof(StratigraphicObservation, layer),loopNameLength);
+        observationGroup.addVar("stratigraphicObservations",stratigraphicObservationType,stratigraphicIndex);
     } catch (netCDF::exceptions::NcException& e) {
         if (verbose) std::cout << e.what() << std::endl;
         resp = createErrorMsg(1,"Failed to create Data Collection Group and Types",verbose);
@@ -91,7 +105,7 @@ LoopProjectFileResponse DataCollection::GetFaultObservations(netCDF::NcGroup* ro
         if (dcGroups.find("Observations") != dcGroups.end()) {
             netCDF::NcGroup observationGroup = dataCollectionGroup.getGroup("Observations");
             netCDF::NcVar faultObs = observationGroup.getVar("faultObservations");
-            for (size_t i=0;i<observationGroup.getDim("faultIndex").getSize();i++) {
+            for (size_t i=0;i<observationGroup.getDim("faultObservationIndex").getSize();i++) {
                 FaultObservation obs;
                 std::vector<size_t> start; start.push_back(i);
                 faultObs.getVar(start,&obs);
@@ -116,7 +130,7 @@ LoopProjectFileResponse DataCollection::GetFoldObservations(netCDF::NcGroup* roo
         if (dcGroups.find("Observations") != dcGroups.end()) {
             netCDF::NcGroup observationGroup = dataCollectionGroup.getGroup("Observations");
             netCDF::NcVar foldObs = observationGroup.getVar("foldObservations");
-            for (size_t i=0;i<observationGroup.getDim("foldIndex").getSize();i++) {
+            for (size_t i=0;i<observationGroup.getDim("foldObservationIndex").getSize();i++) {
                 FoldObservation obs;
                 std::vector<size_t> start; start.push_back(i);
                 foldObs.getVar(start,&obs);
@@ -141,7 +155,7 @@ LoopProjectFileResponse DataCollection::GetFoliationObservations(netCDF::NcGroup
         if (dcGroups.find("Observations") != dcGroups.end()) {
             netCDF::NcGroup observationGroup = dataCollectionGroup.getGroup("Observations");
             netCDF::NcVar foliationObs = observationGroup.getVar("foliationObservations");
-            for (size_t i=0;i<observationGroup.getDim("foliationIndex").getSize();i++) {
+            for (size_t i=0;i<observationGroup.getDim("foliationObservationIndex").getSize();i++) {
                 FoliationObservation obs;
                 std::vector<size_t> start; start.push_back(i);
                 foliationObs.getVar(start,&obs);
@@ -166,10 +180,35 @@ LoopProjectFileResponse DataCollection::GetDiscontinuityObservations(netCDF::NcG
         if (dcGroups.find("Observations") != dcGroups.end()) {
             netCDF::NcGroup observationGroup = dataCollectionGroup.getGroup("Observations");
             netCDF::NcVar discontinuityObs = observationGroup.getVar("discontinuityObservations");
-            for (size_t i=0;i<observationGroup.getDim("discontinuityIndex").getSize();i++) {
+            for (size_t i=0;i<observationGroup.getDim("discontinuityObservationIndex").getSize();i++) {
                 DiscontinuityObservation obs;
                 std::vector<size_t> start; start.push_back(i);
                 discontinuityObs.getVar(start,&obs);
+                observations.push_back(obs);
+            }
+        } else {
+            resp = createErrorMsg(1,"No Observations Group Node Present",verbose);
+        }
+    } else {
+        resp = createErrorMsg(1,"No Data Collection Group Node Present",verbose);
+    }
+    return resp;
+}
+
+LoopProjectFileResponse DataCollection::GetStratigraphicObservations(netCDF::NcGroup* rootNode, std::vector<StratigraphicObservation>& observations, bool verbose)
+{
+    LoopProjectFileResponse resp = {0,""};
+    auto groups = rootNode->getGroups();
+    if (groups.find("DataCollection") != groups.end()) {
+        netCDF::NcGroup dataCollectionGroup = rootNode->getGroup("DataCollection");
+        auto dcGroups = dataCollectionGroup.getGroups();
+        if (dcGroups.find("Observations") != dcGroups.end()) {
+            netCDF::NcGroup observationGroup = dataCollectionGroup.getGroup("Observations");
+            netCDF::NcVar stratigraphicObs = observationGroup.getVar("stratigraphicObservations");
+            for (size_t i=0;i<observationGroup.getDim("stratigraphicObservationIndex").getSize();i++) {
+                StratigraphicObservation obs;
+                std::vector<size_t> start; start.push_back(i);
+                stratigraphicObs.getVar(start,&obs);
                 observations.push_back(obs);
             }
         } else {
@@ -277,6 +316,31 @@ LoopProjectFileResponse DataCollection::SetDiscontinuityObservations(netCDF::NcG
     } catch (netCDF::exceptions::NcException &e) {
         std::cout << e.what();
         resp = createErrorMsg(1,"Failed to add discontinuity data to loop project file",verbose);
+    }
+    return resp;
+}
+
+LoopProjectFileResponse DataCollection::SetStratigraphicObservations(netCDF::NcGroup* rootNode, std::vector<StratigraphicObservation> observations, bool verbose)
+{
+    LoopProjectFileResponse resp = {0,""};
+    try {
+        auto groups = rootNode->getGroups();
+        if (groups.find("DataCollection") == groups.end()) {
+            rootNode->addGroup("DataCollection");
+        }
+        netCDF::NcGroup dataCollectionGroup = rootNode->getGroup("DataCollection");
+        auto dcGroups = dataCollectionGroup.getGroups();
+        if (dcGroups.find("Observations") == dcGroups.end()) {
+            resp = CreateObservationGroup(&dataCollectionGroup);
+        }
+        netCDF::NcGroup observationGroup = dataCollectionGroup.getGroup("Observations");
+        std::vector<size_t> start; start.push_back(0);
+        std::vector<size_t> count; count.push_back(observations.size());
+        netCDF::NcVar stratigraphicObs = observationGroup.getVar("stratigraphicObservations");
+        stratigraphicObs.putVar(start,count,&(observations[0]));
+    } catch (netCDF::exceptions::NcException &e) {
+        std::cout << e.what();
+        resp = createErrorMsg(1,"Failed to add stratigraphic data to loop project file",verbose);
     }
     return resp;
 }

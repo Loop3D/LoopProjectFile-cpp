@@ -46,7 +46,7 @@ LoopProjectFileResponse ExtractedInformation::CreateExtractedInformationGroup(ne
         stratigraphicLayerType.addMember("colour2Red",netCDF::ncUbyte,offsetof(StratigraphicLayer, colour2Red));
         stratigraphicLayerType.addMember("colour2Green",netCDF::ncUbyte,offsetof(StratigraphicLayer, colour2Green));
         stratigraphicLayerType.addMember("colour2Blue",netCDF::ncUbyte,offsetof(StratigraphicLayer, colour2Blue));
-        stratigraphicInformationGroup.addVar("stratigraphicLayer",stratigraphicLayerType,stratigraphicLayerIndex);
+        stratigraphicInformationGroup.addVar("stratigraphicLayers",stratigraphicLayerType,stratigraphicLayerIndex);
 
         // Create fault event compound type and variable
         netCDF::NcCompoundType faultEventType = eventLogGroup.addCompoundType("FaultEvent",sizeof(FaultEvent));

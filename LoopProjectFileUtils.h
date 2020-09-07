@@ -3,6 +3,8 @@
 
 #include <string>
 
+#define LOOP_NAME_LENGTH 30
+
 /*! \brief A structure for returning an error code and message for loop project files */
 struct LoopProjectFileResponse {
     int errorCode; /**< Error Code:- \n 0 - *No error* \n 1 - *Error* */

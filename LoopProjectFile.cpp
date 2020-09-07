@@ -147,6 +147,11 @@ LoopProjectFileResponse GetDiscontinuityObservations(std::string filename, std::
     LPF_OPEN_RUN(filename, DataCollection::GetDiscontinuityObservations, data, true, verbose);
 }
 
+LoopProjectFileResponse GetStratigraphicObservations(std::string filename, std::vector<StratigraphicObservation> &data, bool verbose)
+{
+    LPF_OPEN_RUN(filename, DataCollection::GetStratigraphicObservations, data, true, verbose);
+}
+
 LoopProjectFileResponse GetFaultEvents(std::string filename, std::vector<FaultEvent> &data, bool verbose)
 {
     LPF_OPEN_RUN(filename, ExtractedInformation::GetFaultEvents, data, true, verbose);
@@ -210,6 +215,11 @@ LoopProjectFileResponse SetFoliationObservations(std::string filename, std::vect
 LoopProjectFileResponse SetDiscontinuityObservations(std::string filename, std::vector<DiscontinuityObservation> data, bool verbose)
 {
     LPF_OPEN_RUN(filename, DataCollection::SetDiscontinuityObservations, data, false, verbose);
+}
+
+LoopProjectFileResponse SetStratigraphicObservations(std::string filename, std::vector<StratigraphicObservation> data, bool verbose)
+{
+    LPF_OPEN_RUN(filename, DataCollection::SetStratigraphicObservations, data, false, verbose);
 }
 
 LoopProjectFileResponse SetFaultEvents(std::string filename, std::vector<FaultEvent> data, bool verbose)

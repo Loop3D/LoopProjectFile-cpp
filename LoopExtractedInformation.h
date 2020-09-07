@@ -3,7 +3,6 @@
 
 #include <netcdf>
 #include "LoopProjectFileUtils.h"
-#define LOOP_NAME_LENGTH 30
 
 namespace LoopProjectFile {
 
