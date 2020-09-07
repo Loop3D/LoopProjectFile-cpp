@@ -232,11 +232,6 @@ LoopProjectFileResponse SetDiscontinuityEvents(std::string filename, std::vector
     LPF_OPEN_RUN(filename, ExtractedInformation::SetDiscontinuityEvents, data, false, verbose);
 }
 
-LoopProjectFileResponse SetDiscontinuityEvents(std::string filename, std::vector<DiscontinuityEvent> data, bool verbose)
-{
-    LPF_OPEN_RUN(filename, ExtractedInformation::SetDiscontinuityEvents, data, false, verbose);
-}
-
 LoopProjectFileResponse SetStratigraphicLayers(std::string filename, std::vector<StratigraphicLayer> data, bool verbose)
 {
     LPF_OPEN_RUN(filename, ExtractedInformation::SetStratigraphicLayers, data, false, verbose);
