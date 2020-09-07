@@ -134,6 +134,7 @@ LoopProjectFileResponse SetDiscontinuityObservations(std::string filename, std::
 LoopProjectFileResponse SetFaultEvents(std::string filename, std::vector<FaultEvent> data, bool verbose=false);
 LoopProjectFileResponse SetFoldEvents(std::string filename, std::vector<FoldEvent> data, bool verbose=false);
 LoopProjectFileResponse SetFoliationEvents(std::string filename, std::vector<FoliationEvent> data, bool verbose=false);
+LoopProjectFileResponse SetDiscontiuityEvents(std::string filename, std::vector<DiscontinuityEvent> data, bool verbose=false);
 LoopProjectFileResponse SetStratigraphicLayers(std::string filename, std::vector<StratigraphicLayer> data, bool verbose=false);
 /*!@}*/
 
