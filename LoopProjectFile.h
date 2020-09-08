@@ -132,7 +132,7 @@ LoopProjectFileResponse SetFaultObservations(std::string filename, std::vector<F
 LoopProjectFileResponse SetFoldObservations(std::string filename, std::vector<FoldObservation> data, bool verbose=false);
 LoopProjectFileResponse SetFoliationObservations(std::string filename, std::vector<FoliationObservation> data, bool verbose=false);
 LoopProjectFileResponse SetDiscontinuityObservations(std::string filename, std::vector<DiscontinuityObservation> data, bool verbose=false);
-LoopProjectFileResponse SetStartigraphicObservations(std::string filename, std::vector<StratigraphicObservation> data, bool verbose=false);
+LoopProjectFileResponse SetStratigraphicObservations(std::string filename, std::vector<StratigraphicObservation> data, bool verbose=false);
 LoopProjectFileResponse SetFaultEvents(std::string filename, std::vector<FaultEvent> data, bool verbose=false);
 LoopProjectFileResponse SetFoldEvents(std::string filename, std::vector<FoldEvent> data, bool verbose=false);
 LoopProjectFileResponse SetFoliationEvents(std::string filename, std::vector<FoliationEvent> data, bool verbose=false);
