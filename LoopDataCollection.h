@@ -97,10 +97,6 @@ struct DiscontinuityObservation : public Observation {
     /*! Contructor. Zeros all variables */
     DiscontinuityObservation() : Observation() {
         type = DISCONTINUITYOBSERVATION;
-        eventId = 0;
-        easting = 0;
-        northing = 0;
-        altitude = 0;
         dipdir = 0;
         dip = 0;
     }
@@ -115,14 +111,14 @@ struct StratigraphicObservation : public Observation {
     /*! Contructor. Zeros all variables */
     StratigraphicObservation() : Observation() {
         type = STRATIGRAPHICOBSERVATION;
-        eventId = 0;
-        easting = 0;
-        northing = 0;
-        altitude = 0;
         dipdir = 0;
         dip = 0;
+        dipPolarity = 0;
+        for (auto i=0;i<LOOP_NAME_LENGTH;i++) layer[i] = 0;
     }
 };
+
+
 namespace DataCollection {
 
 /*!
