@@ -2,6 +2,15 @@
 
 namespace LoopProjectFile {
 
+void LoopExtents::SwapExtents(double &minVal, double &maxVal)
+{
+    if (minVal > maxVal) {
+        double tmp = minVal;
+        minVal = maxVal;
+        maxVal = tmp;
+    }
+}
+
 LoopProjectFileResponse LoopExtents::SetExtents(netCDF::NcGroup* rootNode, LoopExtents extents, bool verbose)
 {
     LoopProjectFileResponse resp = {0,""};
@@ -9,6 +18,13 @@ LoopProjectFileResponse LoopExtents::SetExtents(netCDF::NcGroup* rootNode, LoopE
         resp = createErrorMsg(1,"ERROR: Group Node invalid!");
         return resp;
     }
+    // Do a quick sanity check and swap min and max values if wrong order
+    SwapExtents(extents.minEasting, extents.maxEasting);
+    SwapExtents(extents.minNorthing, extents.maxNorthing);
+    SwapExtents(extents.bottomDepth, extents.topDepth);
+    SwapExtents(extents.minLatitude, extents.maxLatitude);
+    SwapExtents(extents.minLongitude, extents.maxLongitude);
+
     try {
         rootNode->putAtt("minLatitude",netCDF::ncDouble,extents.minLatitude);
         rootNode->putAtt("maxLatitude",netCDF::ncDouble,extents.maxLatitude);
@@ -20,8 +36,8 @@ LoopProjectFileResponse LoopExtents::SetExtents(netCDF::NcGroup* rootNode, LoopE
         rootNode->putAtt("maxEasting",netCDF::ncDouble,extents.maxEasting);
         rootNode->putAtt("utmZone",netCDF::ncInt,extents.utmZone);
         rootNode->putAtt("utmNorthSouth",netCDF::ncInt,extents.utmNorthSouth);
-        rootNode->putAtt("minDepth",netCDF::ncDouble,extents.minDepth);
-        rootNode->putAtt("maxDepth",netCDF::ncDouble,extents.maxDepth);
+        rootNode->putAtt("topDepth",netCDF::ncDouble,extents.topDepth);
+        rootNode->putAtt("bottomDepth",netCDF::ncDouble,extents.bottomDepth);
         rootNode->putAtt("spacingX",netCDF::ncDouble,extents.spacingX);
         rootNode->putAtt("spacingY",netCDF::ncDouble,extents.spacingY);
         rootNode->putAtt("spacingZ",netCDF::ncDouble,extents.spacingZ);
@@ -51,8 +67,8 @@ LoopProjectFileResponse LoopExtents::GetExtents(netCDF::NcGroup* rootNode, LoopE
         rootNode->getAtt("maxEasting").getValues(&extents.maxEasting);
         rootNode->getAtt("utmZone").getValues(&extents.utmZone);
         rootNode->getAtt("utmNorthSouth").getValues(&extents.utmNorthSouth);
-        rootNode->getAtt("minDepth").getValues(&extents.minDepth);
-        rootNode->getAtt("maxDepth").getValues(&extents.maxDepth);
+        rootNode->getAtt("topDepth").getValues(&extents.topDepth);
+        rootNode->getAtt("bottomDepth").getValues(&extents.bottomDepth);
         rootNode->getAtt("spacingX").getValues(&extents.spacingX);
         rootNode->getAtt("spacingY").getValues(&extents.spacingY);
         rootNode->getAtt("spacingZ").getValues(&extents.spacingZ);
@@ -135,15 +151,15 @@ bool LoopExtents::CheckExtentsValid(netCDF::NcGroup* rootNode, std::vector<int>&
     }
 
     // Check Depth extents
-    double minDepth, maxDepth;
-    if (attributes.find("minDepth") != attributes.end()
-      && attributes.find("maxDepth") != attributes.end()) {
-        rootNode->getAtt("minDepth").getValues(&minDepth);
-        rootNode->getAtt("maxDepth").getValues(&maxDepth);
+    double topDepth, bottomDepth;
+    if (attributes.find("topDepth") != attributes.end()
+      && attributes.find("bottomDepth") != attributes.end()) {
+        rootNode->getAtt("topDepth").getValues(&topDepth);
+        rootNode->getAtt("bottomDepth").getValues(&bottomDepth);
         if (verbose) {
             std::cout << "  Depth extents found (m)" << std::endl;
-            std::cout << "\t minDepth     = " << minDepth << std::endl;
-            std::cout << "\t maxDepth     = " << maxDepth << std::endl;
+            std::cout << "\t topDepth     = " << topDepth << std::endl;
+            std::cout << "\t bottomDepth     = " << bottomDepth << std::endl;
 
         }
     } else {
@@ -174,7 +190,7 @@ bool LoopExtents::CheckExtentsValid(netCDF::NcGroup* rootNode, std::vector<int>&
         xyzGridSize.clear();
         xyzGridSize.push_back((int)((maxEasting-minEasting)/((double)spacingX) + 1));
         xyzGridSize.push_back((int)((maxNorthing-minNorthing)/((double)spacingY) + 1));
-        xyzGridSize.push_back((int)((maxDepth-minDepth)/((double)spacingZ) + 1));
+        xyzGridSize.push_back((int)((topDepth-bottomDepth)/((double)spacingZ) + 1));
     }
     return valid;
 }

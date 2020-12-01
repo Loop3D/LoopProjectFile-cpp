@@ -1,4 +1,5 @@
 #include "LoopProjectFile.h"
+#include <sys/stat.h>
 
 int testLoopProjectFileCreateFunctions(std::string filename);
 int testLoopProjectFileSetFunctions(std::string filename);
@@ -8,10 +9,14 @@ int main (int argc, char** argv)
 {
     std::string filename = "testLoopProjectFile.loop3d";
     int errors = 0;
-
-    errors += testLoopProjectFileCreateFunctions(filename);
-
-    errors += testLoopProjectFileSetFunctions(filename);
+    struct stat buffer;
+    if (stat (filename.c_str(), &buffer) != 0) {
+        std::cout << "File " << filename << " does not exist, creating!" << std::endl;
+        errors += testLoopProjectFileCreateFunctions(filename);
+        errors += testLoopProjectFileSetFunctions(filename);
+    } else {
+        std::cout << "File " << filename << " exists reading data!" << std::endl;
+    }
 
     errors += testLoopProjectFileGetFunctions(filename);
 
@@ -53,8 +58,8 @@ int testLoopProjectFileSetFunctions(std::string filename)
     extents.maxLatitude = 2.0;
     extents.minLongitude = 1.0;
     extents.maxLongitude = 2.0;
-    extents.minDepth = 1000.0;
-    extents.maxDepth = 2000.0;
+    extents.topDepth = -1000.0;
+    extents.bottomDepth = -2000.0;
     extents.minEasting = 1000.0;
     extents.maxEasting = 2500.0;
     extents.minNorthing = 1000.0;
@@ -120,7 +125,7 @@ int testLoopProjectFileSetFunctions(std::string filename)
     std::vector<int> dataShape;
     int shapeX = (int)((extents.maxEasting - extents.minEasting) / extents.spacingX + 1);
     int shapeY = (int)((extents.maxNorthing - extents.minNorthing) / extents.spacingY + 1);
-    int shapeZ = (int)((extents.maxDepth - extents.minDepth) / extents.spacingZ + 1);
+    int shapeZ = (int)((extents.topDepth - extents.bottomDepth) / extents.spacingZ + 1);
     dataShape.push_back(shapeX);
     dataShape.push_back(shapeY);
     dataShape.push_back(shapeZ);
@@ -152,8 +157,8 @@ int testLoopProjectFileGetFunctions(std::string filename)
     std::cout << "maxEasting = " << extents.maxEasting << std::endl;
     std::cout << "minNorthing = " << extents.minNorthing << std::endl;
     std::cout << "maxNorthing = " << extents.maxNorthing << std::endl;
-    std::cout << "minDepth = " << extents.minDepth << std::endl;
-    std::cout << "maxDepth = " << extents.maxDepth << std::endl;
+    std::cout << "topDepth = " << extents.topDepth << std::endl;
+    std::cout << "bottomDepth = " << extents.bottomDepth << std::endl;
     std::cout << "utmZone = " << extents.utmZone << std::endl;
     std::cout << "utmNorthSouth = " << extents.utmNorthSouth << std::endl;
     std::cout << "workingFormat = " << extents.workingFormat << std::endl;
@@ -203,7 +208,7 @@ int testLoopProjectFileGetFunctions(std::string filename)
     std::vector<int> dataShape;
     int shapeX = (int)((extents.maxEasting - extents.minEasting) / extents.spacingX + 1);
     int shapeY = (int)((extents.maxNorthing - extents.minNorthing) / extents.spacingY + 1);
-    int shapeZ = (int)((extents.maxDepth - extents.minDepth) / extents.spacingZ + 1);
+    int shapeZ = (int)((extents.topDepth - extents.bottomDepth) / extents.spacingZ + 1);
     dataShape.push_back(shapeX);
     dataShape.push_back(shapeY);
     dataShape.push_back(shapeZ);

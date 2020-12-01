@@ -24,9 +24,9 @@ struct LoopExtents {
     int utmZone;
     int utmNorthSouth;
     /*!@}*/
-    /*!@{ The minimum and maximum extent depths (metres) */
-    double minDepth;
-    double maxDepth;
+    /*!@{ The top and bottom extent depths (metres) */
+    double topDepth;
+    double bottomDepth;
     /*!@}*/
     /*!@{ The spacing distances between points along each axis (metres) */
     double spacingX;
@@ -51,8 +51,8 @@ struct LoopExtents {
         maxEasting = 0;
         utmZone = 0;
         utmNorthSouth = 0;
-        minDepth = 0;
-        maxDepth = 0;
+        topDepth = 0;
+        bottomDepth = 0;
         spacingX = 0;
         spacingY = 0;
         spacingZ = 0;
@@ -94,6 +94,7 @@ static LoopProjectFileResponse GetExtents(netCDF::NcGroup* rootNode, LoopExtents
  */
 static bool CheckExtentsValid(netCDF::NcGroup* rootNode, std::vector<int>& xyzGridSize, bool verbose=false);
 
+static void SwapExtents(double &minVal, double &maxVal);
 }; // LoopExtents
 } // namespace LoopProjectFile
 
