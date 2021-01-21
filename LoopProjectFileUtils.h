@@ -4,6 +4,7 @@
 #include <string>
 
 #define LOOP_NAME_LENGTH 30
+#define LOOP_SUPERGROUP_NAME_LENGTH 30
 
 /*! \brief A structure for returning an error code and message for loop project files */
 struct LoopProjectFileResponse {

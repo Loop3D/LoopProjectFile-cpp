@@ -24,6 +24,7 @@ struct Event {
     double maxAge;
     /*!@}*/
     char name[LOOP_NAME_LENGTH]; /*!< The name of this event */
+    char supergroup[LOOP_SUPERGROUP_NAME_LENGTH]; /*!< The name of this event's supergroup */
     char enabled; /*!< A flag to enable/disable this event from modelling calculations */
     int rank; /*!< A placeholder for permutation calculations */
     EventType type;
@@ -35,6 +36,7 @@ struct Event {
         maxAge = 0;
         enabled = 0;
         for (auto i=0;i<LOOP_NAME_LENGTH;i++) name[i] = 0;
+        for (auto i=0;i<LOOP_SUPERGROUP_NAME_LENGTH;i++) supergroup[i] = 0;
     }
 };
 

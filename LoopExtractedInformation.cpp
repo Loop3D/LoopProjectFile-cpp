@@ -18,6 +18,7 @@ LoopProjectFileResponse ExtractedInformation::CreateExtractedInformationGroup(ne
 {
     LoopProjectFileResponse resp = {0,""};
     std::vector<int> length; length.push_back(LOOP_NAME_LENGTH);
+    std::vector<int> supergroupLength; supergroupLength.push_back(LOOP_SUPERGROUP_NAME_LENGTH);
     try {
         extractedInformationGroup->addGroup("StratigraphicInformation");
         netCDF::NcGroup stratigraphicInformationGroup = extractedInformationGroup->getGroup("StratigraphicInformation");
@@ -36,6 +37,7 @@ LoopProjectFileResponse ExtractedInformation::CreateExtractedInformationGroup(ne
         stratigraphicLayerType.addMember("minAge",netCDF::ncDouble,offsetof(StratigraphicLayer, minAge));
         stratigraphicLayerType.addMember("maxAge",netCDF::ncDouble,offsetof(StratigraphicLayer, maxAge));
         stratigraphicLayerType.addMember("name",netCDF::ncChar,offsetof(StratigraphicLayer, name),length);
+        stratigraphicLayerType.addMember("supergroup",netCDF::ncChar,offsetof(StratigraphicLayer, supergroup),supergroupLength);
         stratigraphicLayerType.addMember("enabled",netCDF::ncChar,offsetof(StratigraphicLayer, enabled));
         stratigraphicLayerType.addMember("rank",netCDF::ncInt,offsetof(StratigraphicLayer, rank));
         stratigraphicLayerType.addMember("type",netCDF::ncInt,offsetof(StratigraphicLayer, type));
@@ -54,6 +56,7 @@ LoopProjectFileResponse ExtractedInformation::CreateExtractedInformationGroup(ne
         faultEventType.addMember("minAge",netCDF::ncDouble,offsetof(FaultEvent, minAge));
         faultEventType.addMember("maxAge",netCDF::ncDouble,offsetof(FaultEvent, maxAge));
         faultEventType.addMember("name",netCDF::ncChar,offsetof(FaultEvent, name),length);
+        faultEventType.addMember("supergroup",netCDF::ncChar,offsetof(FaultEvent, supergroup),supergroupLength);
         faultEventType.addMember("enabled",netCDF::ncChar,offsetof(FaultEvent, enabled));
         faultEventType.addMember("rank",netCDF::ncInt,offsetof(FaultEvent, rank));
         faultEventType.addMember("type",netCDF::ncInt,offsetof(FaultEvent, type));
@@ -66,6 +69,7 @@ LoopProjectFileResponse ExtractedInformation::CreateExtractedInformationGroup(ne
         foldEventType.addMember("minAge",netCDF::ncDouble,offsetof(FoldEvent, minAge));
         foldEventType.addMember("maxAge",netCDF::ncDouble,offsetof(FoldEvent, maxAge));
         foldEventType.addMember("name",netCDF::ncChar,offsetof(FoldEvent, name),length);
+        foldEventType.addMember("supergroup",netCDF::ncChar,offsetof(FoldEvent, supergroup),supergroupLength);
         foldEventType.addMember("enabled",netCDF::ncChar,offsetof(FoldEvent, enabled));
         foldEventType.addMember("rank",netCDF::ncInt,offsetof(FoldEvent, rank));
         foldEventType.addMember("type",netCDF::ncInt,offsetof(FoldEvent, type));
@@ -84,6 +88,7 @@ LoopProjectFileResponse ExtractedInformation::CreateExtractedInformationGroup(ne
         foliationEventType.addMember("minAge",netCDF::ncDouble,offsetof(FoliationEvent, minAge));
         foliationEventType.addMember("maxAge",netCDF::ncDouble,offsetof(FoliationEvent, maxAge));
         foliationEventType.addMember("name",netCDF::ncChar,offsetof(FoliationEvent, name),length);
+        foliationEventType.addMember("supergroup",netCDF::ncChar,offsetof(FoliationEvent, supergroup),supergroupLength);
         foliationEventType.addMember("enabled",netCDF::ncChar,offsetof(FoliationEvent, enabled));
         foliationEventType.addMember("rank",netCDF::ncInt,offsetof(FoliationEvent, rank));
         foliationEventType.addMember("type",netCDF::ncInt,offsetof(FoliationEvent, type));
@@ -97,6 +102,7 @@ LoopProjectFileResponse ExtractedInformation::CreateExtractedInformationGroup(ne
         discontinuityEventType.addMember("minAge",netCDF::ncDouble,offsetof(DiscontinuityEvent, minAge));
         discontinuityEventType.addMember("maxAge",netCDF::ncDouble,offsetof(DiscontinuityEvent, maxAge));
         discontinuityEventType.addMember("name",netCDF::ncChar,offsetof(DiscontinuityEvent, name),length);
+        discontinuityEventType.addMember("supergroup",netCDF::ncChar,offsetof(DiscontinuityEvent, supergroup),supergroupLength);
         discontinuityEventType.addMember("enabled",netCDF::ncChar,offsetof(DiscontinuityEvent, enabled));
         discontinuityEventType.addMember("rank",netCDF::ncInt,offsetof(DiscontinuityEvent, rank));
         discontinuityEventType.addMember("type",netCDF::ncInt,offsetof(DiscontinuityEvent, type));
