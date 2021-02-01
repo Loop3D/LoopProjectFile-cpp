@@ -6,11 +6,11 @@
 #include <iostream>
 #include <sys/stat.h>
 
+#include "LoopProjectFileUtils.h"
 #include "LoopVersion.h"
 #include "LoopExtents.h"
 #include "LoopDataCollection.h"
 #include "LoopExtractedInformation.h"
-#include "LoopProjectFileUtils.h"
 #include "LoopStructuralModels.h"
 #include "LoopGeophysicalModels.h"
 #include "LoopUncertaintyModels.h"
@@ -88,6 +88,7 @@ LoopVersion GetVersion(std::string filename, bool verbose=false);
  * \return Response with success/fail of data retrieval with error message if it failed
  */
 LoopProjectFileResponse GetExtents(std::string filename, LoopExtents& data, bool verbose=false);
+LoopProjectFileResponse GetDataCollectionConfiguration(std::string filename, DataCollectionConfiguration& data, bool verbose=false);
 LoopProjectFileResponse GetFaultObservations(std::string filename, std::vector<FaultObservation> &data, bool verbose=false);
 LoopProjectFileResponse GetFoldObservations(std::string filename, std::vector<FoldObservation> &data, bool verbose=false);
 LoopProjectFileResponse GetFoliationObservations(std::string filename, std::vector<FoliationObservation> &data, bool verbose=false);
@@ -128,6 +129,7 @@ LoopProjectFileResponse GetUncertaintyModel(std::string filename, std::vector<fl
  * \return Response with success/fail of data insertion with error message if it failed
  */
 LoopProjectFileResponse SetExtents(std::string filename, LoopExtents data, bool verbose=false);
+LoopProjectFileResponse SetDataCollectionConfiguration(std::string filename, DataCollectionConfiguration data, bool verbose=false);
 LoopProjectFileResponse SetFaultObservations(std::string filename, std::vector<FaultObservation> data, bool verbose=false);
 LoopProjectFileResponse SetFoldObservations(std::string filename, std::vector<FoldObservation> data, bool verbose=false);
 LoopProjectFileResponse SetFoliationObservations(std::string filename, std::vector<FoliationObservation> data, bool verbose=false);

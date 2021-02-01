@@ -6,6 +6,10 @@
 #define LOOP_NAME_LENGTH 30
 #define LOOP_SUPERGROUP_NAME_LENGTH 30
 
+#ifdef __linux__
+#define strncpy_s strncpy
+#endif
+
 /*! \brief A structure for returning an error code and message for loop project files */
 struct LoopProjectFileResponse {
     int errorCode; /**< Error Code:- \n 0 - *No error* \n 1 - *Error* */

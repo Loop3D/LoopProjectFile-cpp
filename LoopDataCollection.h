@@ -102,6 +102,60 @@ struct DiscontinuityObservation : public Observation {
     }
 };
 
+struct DataCollectionConfiguration {
+    int orientationDecimate;
+    int contactDecimate;
+    int intrusionMode;
+    int interpolationSpacing;
+    int misorientation;
+    char interpolationScheme[30];
+    int faultDecimate;
+    double minFaultLength;
+    double faultDip;
+    double plutonDip;
+    char plutonForm[30];
+    double distBuffer;
+    double contactDip;
+    int contactOrientationDecimate;
+    char nullScheme[30];
+    double thicknessBuffer;
+    double maxThicknessAllowed;
+    int foldDecimate;
+    double fatStep;
+    double closeDip;
+    int useInterpolations;
+    int useFat;
+    DataCollectionConfiguration() {
+        for (int i=0;i<30;i++) {
+            interpolationScheme[i] = 0;
+            plutonForm[i] = 0;
+            nullScheme[i] = 0;
+        }
+        orientationDecimate = 0;
+        contactDecimate = 5; 
+        intrusionMode = 0;
+        interpolationSpacing = 500;
+        misorientation = 30;
+        strncpy_s(interpolationScheme,"scipy_rbf",9);
+        faultDecimate = 5;
+        minFaultLength = 5000.;
+        faultDip = 90.;
+        plutonDip = 45.;
+        strncpy_s(plutonForm,"domes",5);
+        distBuffer = 10;
+        contactDip = -999.;
+        contactOrientationDecimate = 5;
+        strncpy_s(nullScheme,"null",4);
+        thicknessBuffer = 5000.;
+        maxThicknessAllowed = 10000.;
+        foldDecimate = 5;
+        fatStep = 750.;
+        closeDip = -999.;
+        useInterpolations = 1;
+        useFat = 1;
+    }
+};
+
 /*! \brief A structure describing a single stratigraphic observation */
 struct StratigraphicObservation : public Observation {
     double dipdir; /*!< The compass direction of the observed discontinuity dip (degrees) */
@@ -187,7 +241,7 @@ LoopProjectFileResponse GetFoliationObservations(netCDF::NcGroup* rootNode, std:
 LoopProjectFileResponse GetDiscontinuityObservations(netCDF::NcGroup* rootNode, std::vector<DiscontinuityObservation>& observations, bool verbose=false);
 
 /*!
- * \brief Retrieves stratigrphic observation data from the loop project file
+ * \brief Retrieves stratigraphic observation data from the loop project file
  *
  * \param rootNode - the rootNode of the netCDF Loop project file
  * \param observations - a reference to where the observation data is to be copied 
@@ -198,10 +252,21 @@ LoopProjectFileResponse GetDiscontinuityObservations(netCDF::NcGroup* rootNode, 
 LoopProjectFileResponse GetStratigraphicObservations(netCDF::NcGroup* rootNode, std::vector<StratigraphicObservation>& observations, bool verbose=false);
 
 /*!
+ * \brief Retrieves data collection configuration from the loop project file
+ *
+ * \param rootNode - the rootNode of the netCDF Loop project file
+ * \param configuration - a reference to where the configuration data is to be copied 
+ * \param verbose - a flag to toggle verbose message printing
+ *
+ * \return Response with success/fail of observation data retrieval with an error message if it failed
+ */
+LoopProjectFileResponse GetDataCollectionConfiguration(netCDF::NcGroup* rootNode, DataCollectionConfiguration& configuration, bool verbose=false);
+
+/*!
  * \brief Sets fault observation data to the loop project file
  *
  * \param rootNode - the rootNode of the netCDF Loop project file
- * \param observations - the observation data is to be inserted 
+ * \param observations - the observation data to be inserted 
  * \param verbose - a flag to toggle verbose message printing
  *
  * \return Response with success/fail of observation data insertion with an error message if it failed
@@ -212,7 +277,7 @@ LoopProjectFileResponse SetFaultObservations(netCDF::NcGroup* rootNode, std::vec
  * \brief Sets fold observation data to the loop project file
  *
  * \param rootNode - the rootNode of the netCDF Loop project file
- * \param observations - the observation data is to be inserted 
+ * \param observations - the observation data to be inserted 
  * \param verbose - a flag to toggle verbose message printing
  *
  * \return Response with success/fail of observation data insertion with an error message if it failed
@@ -223,7 +288,7 @@ LoopProjectFileResponse SetFoldObservations(netCDF::NcGroup* rootNode, std::vect
  * \brief Sets foliation observation data to the loop project file
  *
  * \param rootNode - the rootNode of the netCDF Loop project file
- * \param observations - the observation data is to be inserted 
+ * \param observations - the observation data to be inserted 
  * \param verbose - a flag to toggle verbose message printing
  *
  * \return Response with success/fail of observation data insertion with an error message if it failed
@@ -234,7 +299,7 @@ LoopProjectFileResponse SetFoliationObservations(netCDF::NcGroup* rootNode, std:
  * \brief Sets discontinuity observation data to the loop project file
  *
  * \param rootNode - the rootNode of the netCDF Loop project file
- * \param observations - the observation data is to be inserted 
+ * \param observations - the observation data to be inserted 
  * \param verbose - a flag to toggle verbose message printing
  *
  * \return Response with success/fail of observation data insertion with an error message if it failed
@@ -245,13 +310,23 @@ LoopProjectFileResponse SetDiscontinuityObservations(netCDF::NcGroup* rootNode, 
  * \brief Sets stratigraphic observation data to the loop project file
  *
  * \param rootNode - the rootNode of the netCDF Loop project file
- * \param observations - the observation data is to be inserted 
+ * \param observations - the observation data to be inserted 
  * \param verbose - a flag to toggle verbose message printing
  *
  * \return Response with success/fail of observation data insertion with an error message if it failed
  */
 LoopProjectFileResponse SetStratigraphicObservations(netCDF::NcGroup* rootNode, std::vector<StratigraphicObservation> observations, bool verbose=false);
 
+/*!
+ * \brief Sets data collection configuration to the loop project file
+ *
+ * \param rootNode - the rootNode of the netCDF Loop project file
+ * \param configuration - the confifuration to be inserted 
+ * \param verbose - a flag to toggle verbose message printing
+ *
+ * \return Response with success/fail of observation data insertion with an error message if it failed
+ */
+LoopProjectFileResponse SetDataCollectionConfiguration(netCDF::NcGroup* rootNode, DataCollectionConfiguration configuration, bool verbose=false);
 } // namespace DataCollection
 } // namespace LoopProjectFile
 

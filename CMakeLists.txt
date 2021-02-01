@@ -6,6 +6,7 @@ else()
     set(LPF_LIBRARY_NAME LoopProjectFileCpp)
 endif()
 set(LPF_TEST_PROG TestingLoopProjectFile)
+set(CMAKE_CXX_STANDARD 11)
 
 project(${LPF_TEST_PROG})
 

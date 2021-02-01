@@ -127,6 +127,11 @@ LoopProjectFileResponse GetExtents(std::string filename, LoopExtents& data, bool
     LPF_OPEN_RUN(filename, LoopExtents::GetExtents, data, true, verbose);
 }
 
+LoopProjectFileResponse GetDataCollectionConfiguration(std::string filename, DataCollectionConfiguration& data, bool verbose)
+{
+    LPF_OPEN_RUN(filename, DataCollection::GetDataCollectionConfiguration, data, true, verbose);
+}
+
 LoopProjectFileResponse GetFaultObservations(std::string filename, std::vector<FaultObservation> &data, bool verbose)
 {
     LPF_OPEN_RUN(filename, DataCollection::GetFaultObservations, data, true, verbose);
@@ -195,6 +200,11 @@ LoopProjectFileResponse GetUncertaintyModel(std::string filename, std::vector<fl
 LoopProjectFileResponse SetExtents(std::string filename, LoopExtents data, bool verbose)
 {
     LPF_OPEN_RUN(filename, LoopExtents::SetExtents, data, false, verbose);
+}
+
+LoopProjectFileResponse SetDataCollectionConfiguration(std::string filename, DataCollectionConfiguration data, bool verbose)
+{
+    LPF_OPEN_RUN(filename, DataCollection::SetDataCollectionConfiguration, data, false, verbose);
 }
 
 LoopProjectFileResponse SetFaultObservations(std::string filename, std::vector<FaultObservation> data, bool verbose)

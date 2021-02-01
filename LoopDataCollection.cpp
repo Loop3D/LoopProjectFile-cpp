@@ -220,6 +220,40 @@ LoopProjectFileResponse DataCollection::GetStratigraphicObservations(netCDF::NcG
     return resp;
 }
 
+LoopProjectFileResponse DataCollection::GetDataCollectionConfiguration(netCDF::NcGroup* rootNode, DataCollectionConfiguration& configuration, bool verbose)
+{
+    LoopProjectFileResponse resp = {0,""};
+    auto groups = rootNode->getGroups();
+    if (groups.find("DataCollection") != groups.end()) {
+        netCDF::NcGroup dataCollectionGroup = rootNode->getGroup("DataCollection");
+        dataCollectionGroup.getAtt("orientationDecimate").getValues(&configuration.orientationDecimate);
+        dataCollectionGroup.getAtt("contactDecimate").getValues(&configuration.contactDecimate);
+        dataCollectionGroup.getAtt("intrusionMode").getValues(&configuration.intrusionMode);
+        dataCollectionGroup.getAtt("interpolationSpacing").getValues(&configuration.interpolationSpacing);
+        dataCollectionGroup.getAtt("misorientation").getValues(&configuration.misorientation);
+        dataCollectionGroup.getAtt("interpolationScheme").getValues(&configuration.interpolationScheme);
+        dataCollectionGroup.getAtt("faultDecimate").getValues(&configuration.faultDecimate);
+        dataCollectionGroup.getAtt("minFaultLength").getValues(&configuration.minFaultLength);
+        dataCollectionGroup.getAtt("faultDip").getValues(&configuration.faultDip);
+        dataCollectionGroup.getAtt("plutonDip").getValues(&configuration.plutonDip);
+        dataCollectionGroup.getAtt("plutonForm").getValues(&configuration.plutonForm);
+        dataCollectionGroup.getAtt("distBuffer").getValues(&configuration.distBuffer);
+        dataCollectionGroup.getAtt("contactDip").getValues(&configuration.contactDip);
+        dataCollectionGroup.getAtt("contactOrientationDecimate").getValues(&configuration.contactOrientationDecimate);
+        dataCollectionGroup.getAtt("nullScheme").getValues(&configuration.nullScheme);
+        dataCollectionGroup.getAtt("thicknessBuffer").getValues(&configuration.thicknessBuffer);
+        dataCollectionGroup.getAtt("maxThicknessAllowed").getValues(&configuration.maxThicknessAllowed);
+        dataCollectionGroup.getAtt("foldDecimate").getValues(&configuration.foldDecimate);
+        dataCollectionGroup.getAtt("fatStep").getValues(&configuration.fatStep);
+        dataCollectionGroup.getAtt("closeDip").getValues(&configuration.closeDip);
+        dataCollectionGroup.getAtt("useInterpolations").getValues(&configuration.useInterpolations);
+        dataCollectionGroup.getAtt("useFat").getValues(&configuration.useFat);
+    } else {
+        resp = createErrorMsg(1,"No Data Collection Group Node Present",verbose);
+    }
+    return resp;
+}
+
 LoopProjectFileResponse DataCollection::SetFaultObservations(netCDF::NcGroup* rootNode, std::vector<FaultObservation> observations, bool verbose)
 {
     LoopProjectFileResponse resp = {0,""};
@@ -338,6 +372,44 @@ LoopProjectFileResponse DataCollection::SetStratigraphicObservations(netCDF::NcG
         std::vector<size_t> count; count.push_back(observations.size());
         netCDF::NcVar stratigraphicObs = observationGroup.getVar("stratigraphicObservations");
         stratigraphicObs.putVar(start,count,&(observations[0]));
+    } catch (netCDF::exceptions::NcException &e) {
+        std::cout << e.what();
+        resp = createErrorMsg(1,"Failed to add stratigraphic data to loop project file",verbose);
+    }
+    return resp;
+}
+
+LoopProjectFileResponse DataCollection::SetDataCollectionConfiguration(netCDF::NcGroup* rootNode, DataCollectionConfiguration configuration, bool verbose)
+{
+    LoopProjectFileResponse resp = {0,""};
+    try {
+        auto groups = rootNode->getGroups();
+        if (groups.find("DataCollection") == groups.end()) {
+            rootNode->addGroup("DataCollection");
+        }
+        netCDF::NcGroup dataCollectionGroup = rootNode->getGroup("DataCollection");
+        dataCollectionGroup.putAtt("orientationDecimate",netCDF::ncInt,configuration.orientationDecimate);
+        dataCollectionGroup.putAtt("contactDecimate",netCDF::ncInt,configuration.contactDecimate);
+        dataCollectionGroup.putAtt("intrusionMode",netCDF::ncInt,configuration.intrusionMode);
+        dataCollectionGroup.putAtt("interpolationSpacing",netCDF::ncInt,configuration.interpolationSpacing);
+        dataCollectionGroup.putAtt("misorientation",netCDF::ncInt,configuration.misorientation);
+        dataCollectionGroup.putAtt("interpolationScheme",netCDF::ncChar,30,configuration.interpolationScheme);
+        dataCollectionGroup.putAtt("faultDecimate",netCDF::ncInt,configuration.faultDecimate);
+        dataCollectionGroup.putAtt("minFaultLength",netCDF::ncDouble,configuration.minFaultLength);
+        dataCollectionGroup.putAtt("faultDip",netCDF::ncDouble,configuration.faultDip);
+        dataCollectionGroup.putAtt("plutonDip",netCDF::ncDouble,configuration.plutonDip);
+        dataCollectionGroup.putAtt("plutonForm",netCDF::ncChar,30,configuration.plutonForm);
+        dataCollectionGroup.putAtt("distBuffer",netCDF::ncDouble,configuration.distBuffer);
+        dataCollectionGroup.putAtt("contactDip",netCDF::ncDouble,configuration.contactDip);
+        dataCollectionGroup.putAtt("contactOrientationDecimate",netCDF::ncInt,configuration.contactOrientationDecimate);
+        dataCollectionGroup.putAtt("nullScheme",netCDF::ncChar,30,configuration.nullScheme);
+        dataCollectionGroup.putAtt("thicknessBuffer",netCDF::ncDouble,configuration.thicknessBuffer);
+        dataCollectionGroup.putAtt("maxThicknessAllowed",netCDF::ncDouble,configuration.maxThicknessAllowed);
+        dataCollectionGroup.putAtt("foldDecimate",netCDF::ncInt,configuration.foldDecimate);
+        dataCollectionGroup.putAtt("fatStep",netCDF::ncDouble,configuration.fatStep);
+        dataCollectionGroup.putAtt("closeDip",netCDF::ncDouble,configuration.closeDip);
+        dataCollectionGroup.putAtt("useInterpolations",netCDF::ncInt,configuration.useInterpolations);
+        dataCollectionGroup.putAtt("useFat",netCDF::ncInt,configuration.useFat);
     } catch (netCDF::exceptions::NcException &e) {
         std::cout << e.what();
         resp = createErrorMsg(1,"Failed to add stratigraphic data to loop project file",verbose);

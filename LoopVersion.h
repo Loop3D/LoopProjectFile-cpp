@@ -3,7 +3,7 @@
 
 #define LoopVersionMajor 0
 #define LoopVersionMinor 0
-#define LoopVersionSub   7
+#define LoopVersionSub   8
 
 #include <netcdf>
 #include <string>
