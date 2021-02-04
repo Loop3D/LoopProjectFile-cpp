@@ -132,6 +132,16 @@ LoopProjectFileResponse GetDataCollectionConfiguration(std::string filename, Dat
     LPF_OPEN_RUN(filename, DataCollection::GetDataCollectionConfiguration, data, true, verbose);
 }
 
+LoopProjectFileResponse GetDataCollectionSources(std::string filename, DataCollectionSources& data, bool verbose)
+{
+    LPF_OPEN_RUN(filename, DataCollection::GetDataCollectionSources, data, true, verbose);
+}
+
+LoopProjectFileResponse GetStructuralModelsConfiguration(std::string filename, StructuralModelsConfiguration& data, bool verbose)
+{
+ LPF_OPEN_RUN(filename, StructuralModels::GetStructuralModelsConfiguration, data, true, verbose);
+}
+
 LoopProjectFileResponse GetFaultObservations(std::string filename, std::vector<FaultObservation> &data, bool verbose)
 {
     LPF_OPEN_RUN(filename, DataCollection::GetFaultObservations, data, true, verbose);
@@ -205,6 +215,16 @@ LoopProjectFileResponse SetExtents(std::string filename, LoopExtents data, bool 
 LoopProjectFileResponse SetDataCollectionConfiguration(std::string filename, DataCollectionConfiguration data, bool verbose)
 {
     LPF_OPEN_RUN(filename, DataCollection::SetDataCollectionConfiguration, data, false, verbose);
+}
+
+LoopProjectFileResponse SetDataCollectionSources(std::string filename, DataCollectionSources data, bool verbose)
+{
+    LPF_OPEN_RUN(filename, DataCollection::SetDataCollectionSources, data, false, verbose);
+}
+
+LoopProjectFileResponse SetStructuralModelsConfiguration(std::string filename, StructuralModelsConfiguration data, bool verbose)
+{
+    LPF_OPEN_RUN(filename, StructuralModels::SetStructuralModelsConfiguration, data, false, verbose);
 }
 
 LoopProjectFileResponse SetFaultObservations(std::string filename, std::vector<FaultObservation> data, bool verbose)

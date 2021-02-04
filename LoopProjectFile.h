@@ -89,6 +89,9 @@ LoopVersion GetVersion(std::string filename, bool verbose=false);
  */
 LoopProjectFileResponse GetExtents(std::string filename, LoopExtents& data, bool verbose=false);
 LoopProjectFileResponse GetDataCollectionConfiguration(std::string filename, DataCollectionConfiguration& data, bool verbose=false);
+LoopProjectFileResponse GetDataCollectionSources(std::string filename, DataCollectionSources& data, bool verbose=false);
+LoopProjectFileResponse GetStructuralModelsConfiguration(std::string filename, StructuralModelsConfiguration& data, bool verbose=false);
+LoopProjectFileResponse GetConfiguration(std::string filename, DataCollectionConfiguration& data, bool verbose=false);
 LoopProjectFileResponse GetFaultObservations(std::string filename, std::vector<FaultObservation> &data, bool verbose=false);
 LoopProjectFileResponse GetFoldObservations(std::string filename, std::vector<FoldObservation> &data, bool verbose=false);
 LoopProjectFileResponse GetFoliationObservations(std::string filename, std::vector<FoliationObservation> &data, bool verbose=false);
@@ -130,6 +133,8 @@ LoopProjectFileResponse GetUncertaintyModel(std::string filename, std::vector<fl
  */
 LoopProjectFileResponse SetExtents(std::string filename, LoopExtents data, bool verbose=false);
 LoopProjectFileResponse SetDataCollectionConfiguration(std::string filename, DataCollectionConfiguration data, bool verbose=false);
+LoopProjectFileResponse SetDataCollectionSources(std::string filename, DataCollectionSources data, bool verbose=false);
+LoopProjectFileResponse SetStructuralModelsConfiguration(std::string filename, StructuralModelsConfiguration data, bool verbose=false);
 LoopProjectFileResponse SetFaultObservations(std::string filename, std::vector<FaultObservation> data, bool verbose=false);
 LoopProjectFileResponse SetFoldObservations(std::string filename, std::vector<FoldObservation> data, bool verbose=false);
 LoopProjectFileResponse SetFoliationObservations(std::string filename, std::vector<FoliationObservation> data, bool verbose=false);

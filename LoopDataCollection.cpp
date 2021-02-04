@@ -226,6 +226,9 @@ LoopProjectFileResponse DataCollection::GetDataCollectionConfiguration(netCDF::N
     auto groups = rootNode->getGroups();
     if (groups.find("DataCollection") != groups.end()) {
         netCDF::NcGroup dataCollectionGroup = rootNode->getGroup("DataCollection");
+        dataCollectionGroup.getAtt("quietMode").getValues(&configuration.quietMode);
+        dataCollectionGroup.getAtt("deposits").getValues(&configuration.deposits);
+        dataCollectionGroup.getAtt("dtb").getValues(&configuration.dtb);
         dataCollectionGroup.getAtt("orientationDecimate").getValues(&configuration.orientationDecimate);
         dataCollectionGroup.getAtt("contactDecimate").getValues(&configuration.contactDecimate);
         dataCollectionGroup.getAtt("intrusionMode").getValues(&configuration.intrusionMode);
@@ -248,6 +251,25 @@ LoopProjectFileResponse DataCollection::GetDataCollectionConfiguration(netCDF::N
         dataCollectionGroup.getAtt("closeDip").getValues(&configuration.closeDip);
         dataCollectionGroup.getAtt("useInterpolations").getValues(&configuration.useInterpolations);
         dataCollectionGroup.getAtt("useFat").getValues(&configuration.useFat);
+    } else {
+        resp = createErrorMsg(1,"No Data Collection Group Node Present",verbose);
+    }
+    return resp;
+}
+
+LoopProjectFileResponse DataCollection::GetDataCollectionSources(netCDF::NcGroup* rootNode, DataCollectionSources& sources, bool verbose)
+{
+    LoopProjectFileResponse resp = {0,""};
+    auto groups = rootNode->getGroups();
+    if (groups.find("DataCollection") != groups.end()) {
+        netCDF::NcGroup dataCollectionGroup = rootNode->getGroup("DataCollection");
+        dataCollectionGroup.getAtt("structureUrl").getValues(&sources.structureUrl);
+        dataCollectionGroup.getAtt("geologyUrl").getValues(&sources.geologyUrl);
+        dataCollectionGroup.getAtt("faultUrl").getValues(&sources.faultUrl);
+        dataCollectionGroup.getAtt("foldUrl").getValues(&sources.foldUrl);
+        dataCollectionGroup.getAtt("mindepUrl").getValues(&sources.mindepUrl);
+        dataCollectionGroup.getAtt("metadataUrl").getValues(&sources.metadataUrl);
+        dataCollectionGroup.getAtt("sourceTags").getValues(&sources.sourceTags);
     } else {
         resp = createErrorMsg(1,"No Data Collection Group Node Present",verbose);
     }
@@ -388,6 +410,9 @@ LoopProjectFileResponse DataCollection::SetDataCollectionConfiguration(netCDF::N
             rootNode->addGroup("DataCollection");
         }
         netCDF::NcGroup dataCollectionGroup = rootNode->getGroup("DataCollection");
+        dataCollectionGroup.putAtt("quietMode",netCDF::ncInt,configuration.quietMode);
+        dataCollectionGroup.putAtt("deposits",netCDF::ncChar,30,configuration.deposits);
+        dataCollectionGroup.putAtt("dtb",netCDF::ncChar,30,configuration.dtb);
         dataCollectionGroup.putAtt("orientationDecimate",netCDF::ncInt,configuration.orientationDecimate);
         dataCollectionGroup.putAtt("contactDecimate",netCDF::ncInt,configuration.contactDecimate);
         dataCollectionGroup.putAtt("intrusionMode",netCDF::ncInt,configuration.intrusionMode);
@@ -412,7 +437,30 @@ LoopProjectFileResponse DataCollection::SetDataCollectionConfiguration(netCDF::N
         dataCollectionGroup.putAtt("useFat",netCDF::ncInt,configuration.useFat);
     } catch (netCDF::exceptions::NcException &e) {
         std::cout << e.what();
-        resp = createErrorMsg(1,"Failed to add stratigraphic data to loop project file",verbose);
+        resp = createErrorMsg(1,"Failed to add data collection configuration data to loop project file",verbose);
+    }
+    return resp;
+}
+
+LoopProjectFileResponse DataCollection::SetDataCollectionSources(netCDF::NcGroup* rootNode, DataCollectionSources sources, bool verbose)
+{
+    LoopProjectFileResponse resp = {0,""};
+    try {
+        auto groups = rootNode->getGroups();
+        if (groups.find("DataCollection") == groups.end()) {
+            rootNode->addGroup("DataCollection");
+        }
+        netCDF::NcGroup dataCollectionGroup = rootNode->getGroup("DataCollection");
+        dataCollectionGroup.putAtt("structureUrl",netCDF::ncChar,200,sources.structureUrl);
+        dataCollectionGroup.putAtt("geologyUrl",netCDF::ncChar,200,sources.geologyUrl);
+        dataCollectionGroup.putAtt("faultUrl",netCDF::ncChar,200,sources.faultUrl);
+        dataCollectionGroup.putAtt("foldUrl",netCDF::ncChar,200,sources.foldUrl);
+        dataCollectionGroup.putAtt("mindepUrl",netCDF::ncChar,200,sources.mindepUrl);
+        dataCollectionGroup.putAtt("metadataUrl",netCDF::ncChar,200,sources.metadataUrl);
+        dataCollectionGroup.putAtt("sourceTags",netCDF::ncChar,200,sources.sourceTags);
+    } catch (netCDF::exceptions::NcException &e) {
+        std::cout << e.what();
+        resp = createErrorMsg(1,"Failed to add data collection configuration data to loop project file",verbose);
     }
     return resp;
 }

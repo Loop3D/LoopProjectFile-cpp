@@ -134,9 +134,9 @@ LoopProjectFileResponse StructuralModels::GetStructuralModel(netCDF::NcGroup* ro
             netCDF::NcDim northing = smGroup.getDim("northing");
             netCDF::NcDim depth = smGroup.getDim("depth");
             dataShape.clear();
-            dataShape.push_back(easting.getSize());
-            dataShape.push_back(northing.getSize());
-            dataShape.push_back(depth.getSize());
+            dataShape.push_back(static_cast<int>(easting.getSize()));
+            dataShape.push_back(static_cast<int>(northing.getSize()));
+            dataShape.push_back(static_cast<int>(depth.getSize()));
             data.clear();
             data.resize(dataShape[0]*dataShape[1]*dataShape[2]);
             std::vector<size_t> start;
@@ -149,6 +149,58 @@ LoopProjectFileResponse StructuralModels::GetStructuralModel(netCDF::NcGroup* ro
     } catch (netCDF::exceptions::NcException& e) {
         if (verbose) std::cout << e.what() << std::endl;
         resp = createErrorMsg(1, "Failed to add structural model to loop project file",verbose);
+    }
+    return resp;
+}
+
+LoopProjectFileResponse StructuralModels::GetStructuralModelsConfiguration(netCDF::NcGroup* rootNode, StructuralModelsConfiguration& configuration, bool verbose)
+{
+    LoopProjectFileResponse resp = {0,""};
+    auto groups = rootNode->getGroups();
+    if (groups.find("StructuralModels") != groups.end()) {
+        netCDF::NcGroup structuralModelsGroup = rootNode->getGroup("StructuralModels");
+        structuralModelsGroup.getAtt("foliationInterpolator").getValues(&configuration.foliationInterpolator);
+        structuralModelsGroup.getAtt("foliationNumElements").getValues(&configuration.foliationNumElements);
+        structuralModelsGroup.getAtt("foliationBuffer").getValues(&configuration.foliationBuffer);
+        structuralModelsGroup.getAtt("foliationSolver").getValues(&configuration.foliationSolver);
+        structuralModelsGroup.getAtt("foliationDamp").getValues(&configuration.foliationDamp);
+        
+        structuralModelsGroup.getAtt("faultInterpolator").getValues(&configuration.faultInterpolator);
+        structuralModelsGroup.getAtt("faultNumElements").getValues(&configuration.faultNumElements);
+        structuralModelsGroup.getAtt("faultDataRegion").getValues(&configuration.faultDataRegion);
+        structuralModelsGroup.getAtt("faultSolver").getValues(&configuration.faultSolver);
+        structuralModelsGroup.getAtt("faultCpw").getValues(&configuration.faultNpw);
+        structuralModelsGroup.getAtt("faultNpw").getValues(&configuration.faultCpw);
+    } else {
+        resp = createErrorMsg(1,"No Structural Models Group Node Present",verbose);
+    }
+    return resp;
+}
+
+LoopProjectFileResponse StructuralModels::SetStructuralModelsConfiguration(netCDF::NcGroup* rootNode, StructuralModelsConfiguration configuration, bool verbose)
+{
+    LoopProjectFileResponse resp = {0,""};
+    try {
+        auto groups = rootNode->getGroups();
+        if (groups.find("StructuralModels") == groups.end()) {
+            rootNode->addGroup("StructuralModels");
+        }
+        netCDF::NcGroup structuralModelsGroup = rootNode->getGroup("StructuralModels");
+        structuralModelsGroup.putAtt("foliationInterpolator",netCDF::ncChar,30,configuration.foliationInterpolator);
+        structuralModelsGroup.putAtt("foliationNumElements",netCDF::ncInt,configuration.foliationNumElements);
+        structuralModelsGroup.putAtt("foliationBuffer",netCDF::ncDouble,configuration.foliationBuffer);
+        structuralModelsGroup.putAtt("foliationSolver",netCDF::ncChar,30,configuration.foliationSolver);
+        structuralModelsGroup.putAtt("foliationDamp",netCDF::ncInt,configuration.foliationDamp);
+
+        structuralModelsGroup.putAtt("faultInterpolator",netCDF::ncChar,30,configuration.faultInterpolator);
+        structuralModelsGroup.putAtt("faultNumElements",netCDF::ncInt,configuration.faultNumElements);
+        structuralModelsGroup.putAtt("faultDataRegion",netCDF::ncDouble,configuration.faultDataRegion);
+        structuralModelsGroup.putAtt("faultSolver",netCDF::ncChar,30,configuration.faultSolver);
+        structuralModelsGroup.putAtt("faultCpw",netCDF::ncInt,configuration.faultCpw);
+        structuralModelsGroup.putAtt("faultNpw",netCDF::ncInt,configuration.faultNpw);
+    } catch (netCDF::exceptions::NcException &e) {
+        std::cout << e.what();
+        resp = createErrorMsg(1,"Failed to add structural models configuration data to loop project file",verbose);
     }
     return resp;
 }

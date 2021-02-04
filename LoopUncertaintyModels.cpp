@@ -123,9 +123,9 @@ LoopProjectFileResponse UncertaintyModels::GetUncertaintyModel(netCDF::NcGroup *
             netCDF::NcDim northing = umGroup.getDim("northing");
             netCDF::NcDim depth = umGroup.getDim("depth");
             dataShape.clear();
-            dataShape.push_back(easting.getSize());
-            dataShape.push_back(northing.getSize());
-            dataShape.push_back(depth.getSize());
+            dataShape.push_back(static_cast<int>(easting.getSize()));
+            dataShape.push_back(static_cast<int>(northing.getSize()));
+            dataShape.push_back(static_cast<int>(depth.getSize()));
             data.clear();
             data.resize(dataShape[0]*dataShape[1]*dataShape[2]);
             std::vector<size_t> start;

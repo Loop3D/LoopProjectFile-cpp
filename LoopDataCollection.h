@@ -103,6 +103,9 @@ struct DiscontinuityObservation : public Observation {
 };
 
 struct DataCollectionConfiguration {
+    int quietMode;
+    char deposits[30];
+    char dtb[30];
     int orientationDecimate;
     int contactDecimate;
     int intrusionMode;
@@ -127,10 +130,14 @@ struct DataCollectionConfiguration {
     int useFat;
     DataCollectionConfiguration() {
         for (int i=0;i<30;i++) {
+            deposits[i] = 0;
+            dtb[i] = 0;
             interpolationScheme[i] = 0;
             plutonForm[i] = 0;
             nullScheme[i] = 0;
         }
+        quietMode = 0;
+        strncpy_s(deposits,"Fe,Cu,Au,NONE",13);
         orientationDecimate = 0;
         contactDecimate = 5; 
         intrusionMode = 0;
@@ -154,6 +161,27 @@ struct DataCollectionConfiguration {
         useInterpolations = 1;
         useFat = 1;
     }
+};
+
+struct DataCollectionSources {
+    char structureUrl[200];
+    char geologyUrl[200];
+    char faultUrl[200];
+    char foldUrl[200];
+    char mindepUrl[200];
+    char metadataUrl[200];
+    char sourceTags[200];
+    DataCollectionSources() {
+        for (int i=0;i<200;i++) {
+            structureUrl[i] = 0;
+            geologyUrl[i] = 0;
+            faultUrl[i] = 0;
+            foldUrl[i] = 0;
+            mindepUrl[i] = 0;
+            metadataUrl[i] = 0;
+            sourceTags[i] = 0;
+        }
+    };
 };
 
 /*! \brief A structure describing a single stratigraphic observation */
@@ -263,6 +291,17 @@ LoopProjectFileResponse GetStratigraphicObservations(netCDF::NcGroup* rootNode, 
 LoopProjectFileResponse GetDataCollectionConfiguration(netCDF::NcGroup* rootNode, DataCollectionConfiguration& configuration, bool verbose=false);
 
 /*!
+ * \brief Retrieves data collection url sources from the loop project file
+ *
+ * \param rootNode - the rootNode of the netCDF Loop project file
+ * \param sources - a reference to where the url sources data is to be copied 
+ * \param verbose - a flag to toggle verbose message printing
+ *
+ * \return Response with success/fail of observation data retrieval with an error message if it failed
+ */
+LoopProjectFileResponse GetDataCollectionSources(netCDF::NcGroup* rootNode, DataCollectionSources& sources, bool verbose=false);
+
+/*!
  * \brief Sets fault observation data to the loop project file
  *
  * \param rootNode - the rootNode of the netCDF Loop project file
@@ -321,12 +360,23 @@ LoopProjectFileResponse SetStratigraphicObservations(netCDF::NcGroup* rootNode, 
  * \brief Sets data collection configuration to the loop project file
  *
  * \param rootNode - the rootNode of the netCDF Loop project file
- * \param configuration - the confifuration to be inserted 
+ * \param configuration - the configuration to be inserted 
  * \param verbose - a flag to toggle verbose message printing
  *
  * \return Response with success/fail of observation data insertion with an error message if it failed
  */
 LoopProjectFileResponse SetDataCollectionConfiguration(netCDF::NcGroup* rootNode, DataCollectionConfiguration configuration, bool verbose=false);
+
+/*!
+ * \brief Sets data collection url sources to the loop project file
+ *
+ * \param rootNode - the rootNode of the netCDF Loop project file
+ * \param sources - the url sources data to be inserted 
+ * \param verbose - a flag to toggle verbose message printing
+ *
+ * \return Response with success/fail of observation data insertion with an error message if it failed
+ */
+LoopProjectFileResponse SetDataCollectionSources(netCDF::NcGroup* rootNode, DataCollectionSources sources, bool verbose=false);
 } // namespace DataCollection
 } // namespace LoopProjectFile
 
