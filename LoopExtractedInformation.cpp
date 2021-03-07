@@ -19,6 +19,7 @@ LoopProjectFileResponse ExtractedInformation::CreateExtractedInformationGroup(ne
     LoopProjectFileResponse resp = {0,""};
     std::vector<int> length; length.push_back(LOOP_NAME_LENGTH);
     std::vector<int> supergroupLength; supergroupLength.push_back(LOOP_SUPERGROUP_NAME_LENGTH);
+    std::vector<int> colourLength; colourLength.push_back(7);
     try {
         extractedInformationGroup->addGroup("StratigraphicInformation");
         netCDF::NcGroup stratigraphicInformationGroup = extractedInformationGroup->getGroup("StratigraphicInformation");
@@ -61,6 +62,11 @@ LoopProjectFileResponse ExtractedInformation::CreateExtractedInformationGroup(ne
         faultEventType.addMember("rank",netCDF::ncInt,offsetof(FaultEvent, rank));
         faultEventType.addMember("type",netCDF::ncInt,offsetof(FaultEvent, type));
         faultEventType.addMember("avgDisplacement",netCDF::ncDouble,offsetof(FaultEvent, avgDisplacement));
+        faultEventType.addMember("avgDownthrowDir",netCDF::ncDouble,offsetof(FaultEvent, avgDownthrowDir));
+        faultEventType.addMember("influenceDistance",netCDF::ncDouble,offsetof(FaultEvent, influenceDistance));
+        faultEventType.addMember("verticalRadius",netCDF::ncDouble,offsetof(FaultEvent, verticalRadius));
+        faultEventType.addMember("horizontalRadius",netCDF::ncDouble,offsetof(FaultEvent, horizontalRadius));
+        faultEventType.addMember("colour",netCDF::ncChar,offsetof(FaultEvent, colour),colourLength);
         eventLogGroup.addVar("faultEvents",faultEventType,faultEventIndex);
 
         // Create fold event compound type and variable

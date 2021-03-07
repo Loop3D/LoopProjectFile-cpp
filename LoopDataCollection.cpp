@@ -42,6 +42,7 @@ LoopProjectFileResponse DataCollection::CreateObservationGroup(netCDF::NcGroup* 
         faultObservationType.addMember("dipPolarity",netCDF::ncDouble,offsetof(FaultObservation, dipPolarity));
         faultObservationType.addMember("val",netCDF::ncDouble,offsetof(FaultObservation, val));
         faultObservationType.addMember("displacement",netCDF::ncDouble,offsetof(FaultObservation, displacement));
+        faultObservationType.addMember("posOnly",netCDF::ncChar,offsetof(FaultObservation, posOnly));
         observationGroup.addVar("faultObservations",faultObservationType,faultIndex);
 
         // Create fold observation compound type and variable

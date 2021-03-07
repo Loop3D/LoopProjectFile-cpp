@@ -46,6 +46,7 @@ struct FaultObservation : public Observation {
     double dipPolarity; /*!< The dipPolarity of the dip 0=normal 1=inverted */
     double val; /*!< The calculated depth on the stratigraphic column of the observation (metres) */
     double displacement; /*!< The displacement of the fault at this observation */
+    char posOnly;  /*!< A flag to indicate that this observation is a position only */
     /*! Contructor. Zeros all variables */
     FaultObservation() : Observation() {
         type = FAULTOBSERVATION;
@@ -54,6 +55,7 @@ struct FaultObservation : public Observation {
         dipPolarity = 0;
         val = 0;
         displacement = 0;
+        posOnly = 0;
     }
 };
 

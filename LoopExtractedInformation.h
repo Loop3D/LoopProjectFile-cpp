@@ -43,10 +43,20 @@ struct Event {
 /*! \brief A structure describing a fault event */
 struct FaultEvent : public Event {
     double avgDisplacement; /*!< The calculated average displacement across the fault (metres) */
+    double avgDownthrowDir; /*!< The calculated average downthrow direction of the fault (degrees) */
+    double influenceDistance; /*!< The calculated influence distance the fault (metres) */
+    double verticalRadius; /*!< The calculated influence depth of the fault (metres) */
+    double horizontalRadius; /*!< The calculated horizontal influence of the fault (metres) */
+    char colour[7];
     /*! Constructor. Zeros all values */
     FaultEvent() : Event() {
         type = FAULTEVENT;
         avgDisplacement = 0;
+        avgDownthrowDir = 0;
+        influenceDistance = 0;
+        verticalRadius = 0;
+        horizontalRadius = 0;
+        for (int i=0;i<7;i++) colour[i] = 0;
     }
 };
 
