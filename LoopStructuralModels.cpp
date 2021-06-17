@@ -147,8 +147,8 @@ LoopProjectFileResponse StructuralModels::GetStructuralModel(netCDF::NcGroup* ro
             dataVar.getVar(start,count,&data[0]);
         }
     } catch (netCDF::exceptions::NcException& e) {
-        if (verbose) std::cout << e.what() << std::endl;
-        resp = createErrorMsg(1, "Failed to add structural model to loop project file",verbose);
+        // if (verbose) std::cout << e.what() << std::endl;
+        resp = createErrorMsg(1, "No structural model in loop project file",verbose);
     }
     return resp;
 }

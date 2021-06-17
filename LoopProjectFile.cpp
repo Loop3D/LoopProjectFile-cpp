@@ -192,6 +192,11 @@ LoopProjectFileResponse GetStratigraphicLayers(std::string filename, std::vector
     LPF_OPEN_RUN(filename, ExtractedInformation::GetStratigraphicLayers, data, true, verbose);
 }
 
+LoopProjectFileResponse GetEventRelationships(std::string filename, std::vector<EventLink> &data, bool verbose)
+{
+    LPF_OPEN_RUN(filename, ExtractedInformation::GetEventRelationships, data, true, verbose);
+}
+
 LoopProjectFileResponse GetStructuralModel(std::string filename, std::vector<float> &data, std::vector<int> &dataShape, int index, bool verbose)
 {
     LPF_OPEN_RUN_WITH_SHAPE(filename, StructuralModels::GetStructuralModel, data, dataShape, index, true, verbose);
@@ -275,6 +280,11 @@ LoopProjectFileResponse SetDiscontinuityEvents(std::string filename, std::vector
 LoopProjectFileResponse SetStratigraphicLayers(std::string filename, std::vector<StratigraphicLayer> data, bool verbose)
 {
     LPF_OPEN_RUN(filename, ExtractedInformation::SetStratigraphicLayers, data, false, verbose);
+}
+
+LoopProjectFileResponse SetEventRelationships(std::string filename, std::vector<EventLink> data, bool verbose)
+{
+    LPF_OPEN_RUN(filename, ExtractedInformation::SetEventRelationships, data, false, verbose);
 }
 
 LoopProjectFileResponse SetStructuralModel(std::string filename, std::vector<float> data, std::vector<int> dataShape, int index, bool verbose)

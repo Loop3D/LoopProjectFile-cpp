@@ -40,6 +40,18 @@ struct Event {
     }
 };
 
+/*! \brief A structure describing a link between events */
+struct EventLink {
+    int eventId1; /*!< The unique event identifier for the first event in the link (unique to all events types) */
+    int eventId2; /*!< The unique event identifier for the second event in the link (unique to all events types) */
+    char bidirectional; /*!< A flag to indicator a bidirectional relationship */
+    EventLink() {
+        eventId1 = 0;
+        eventId2 = 0;
+        bidirectional = 0;
+    }
+};
+
 /*! \brief A structure describing a fault event */
 struct FaultEvent : public Event {
     double avgDisplacement; /*!< The calculated average displacement across the fault (metres) */
@@ -48,6 +60,15 @@ struct FaultEvent : public Event {
     double verticalRadius; /*!< The calculated influence depth of the fault (metres) */
     double horizontalRadius; /*!< The calculated horizontal influence of the fault (metres) */
     char colour[7];
+    double centreEasting; /*!< The calculated easting of centre of the fault (metres) */
+    double centreNorthing; /*!< The calculated northing of centre of the fault (metres) */
+    double centreAltitude; /*!< The calculated altitude of centre of the fault (metres) */
+    double avgSlipDirEasting; /*!< The calculated easting of the average slip direction of the fault (metres) */
+    double avgSlipDirNorthing; /*!< The calculated northing of the average slip direction of the fault (metres) */
+    double avgSlipDirAltitude; /*!< The calculated altitude of the average slip direction of the fault (metres) */
+    double avgNormalEasting; /*!< The calculated easting of the average normal direction of the fault (metres) */
+    double avgNormalNorthing; /*!< The calculated northing of the average normal direction of the fault (metres) */
+    double avgNormalAltitude; /*!< The calculated altitude of the average normal direction of the fault (metres) */
     /*! Constructor. Zeros all values */
     FaultEvent() : Event() {
         type = FAULTEVENT;
@@ -57,6 +78,15 @@ struct FaultEvent : public Event {
         verticalRadius = 0;
         horizontalRadius = 0;
         for (int i=0;i<7;i++) colour[i] = 0;
+        centreEasting = 0;
+        centreNorthing = 0;
+        centreAltitude = 0;
+        avgSlipDirEasting = 0;
+        avgSlipDirNorthing = 0;
+        avgSlipDirAltitude = 0;
+        avgNormalEasting = 0;
+        avgNormalNorthing = 0;
+        avgNormalAltitude = 0;
     }
 };
 
@@ -206,6 +236,17 @@ LoopProjectFileResponse GetDiscontinuityEvents(netCDF::NcGroup* rootNode, std::v
 LoopProjectFileResponse GetStratigraphicLayers(netCDF::NcGroup* rootNode, std::vector<StratigraphicLayer>& layers, bool verbose=false);
 
 /*!
+ * \brief Retrieves the list of event links from the loop project file
+ *
+ * \param rootNode - the rootNode of the netCDF Loop project file
+ * \param eventLinks - a reference to where the event link data is to be copied
+ * \param verbose - a flag to toggle verbose message printing
+ *
+ * \return Response with success/fail of event links retrieval with an error message if it failed
+ */
+LoopProjectFileResponse GetEventRelationships(netCDF::NcGroup* rootNode, std::vector<EventLink>& eventLinks, bool verbose=false);
+
+/*!
  * \brief Sets fault event information to the loop project file
  *
  * \param rootNode - the rootNode of the netCDF Loop project file
@@ -253,12 +294,23 @@ LoopProjectFileResponse SetDiscontinuityEvents(netCDF::NcGroup* rootNode, std::v
  * \brief Sets stratigraphic log information in the loop project file
  *
  * \param rootNode - the rootNode of the netCDF Loop project file
- * \param layers - the stratigraphic layer data to be inserted 
+ * \param layers - the stratigraphic layer data to be inserted
  * \param verbose - a flag to toggle verbose message printing
  *
  * \return Response with success/fail of event information insertion with an error message if it failed
  */
 LoopProjectFileResponse SetStratigraphicLayers(netCDF::NcGroup* rootNode, std::vector<StratigraphicLayer> layers, bool verbose=false);
+
+/*!
+ * \brief Sets event link information in the loop project file
+ *
+ * \param rootNode - the rootNode of the netCDF Loop project file
+ * \param eventLinks - the event link data to be inserted 
+ * \param verbose - a flag to toggle verbose message printing
+ *
+ * \return Response with success/fail of event link insertion with an error message if it failed
+ */
+LoopProjectFileResponse SetEventRelationships(netCDF::NcGroup* rootNode, std::vector<EventLink> eventLinks, bool verbose=false);
 
 } // namespace ExtractedInformation
 } // namespace LoopProjectFile

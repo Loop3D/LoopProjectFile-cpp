@@ -111,6 +111,15 @@ int testLoopProjectFileSetFunctions(std::string filename)
         faultEvent.maxAge = i*0.5 + 0.5;
         std::string name = "Testing ";
         strncpy_s(faultEvent.name,name.c_str(),LOOP_NAME_LENGTH);
+        faultEvent.centreEasting = 1;
+        faultEvent.centreNorthing = 1;
+        faultEvent.centreAltitude = 1;
+        faultEvent.avgSlipDirEasting = 2;
+        faultEvent.avgSlipDirNorthing = 2;
+        faultEvent.avgSlipDirAltitude = 2;
+        faultEvent.avgNormalEasting = 3;
+        faultEvent.avgNormalNorthing = 3;
+        faultEvent.avgNormalAltitude = 3;
         faultEvents.push_back(faultEvent);
     }
     for (auto it=faultEvents.begin(); it!=faultEvents.end(); it++) {
