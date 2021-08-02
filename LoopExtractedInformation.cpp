@@ -56,11 +56,11 @@ LoopProjectFileResponse ExtractedInformation::CreateExtractedInformationGroup(ne
         stratigraphicInformationGroup.addVar("stratigraphicLayers",stratigraphicLayerType,stratigraphicLayerIndex);
 
         // Create event link compound type and variable
-        netCDF::NcCompoundType eventLinkType = eventRelationshipsGroup.addCompoundType("EventLink",sizeof(EventLink));
-        eventLinkType.addMember("eventId1",netCDF::ncInt,offsetof(EventLink, eventId1));
-        eventLinkType.addMember("eventId2",netCDF::ncInt,offsetof(EventLink, eventId2));
-        eventLinkType.addMember("bidirectional",netCDF::ncChar,offsetof(EventLink, bidirectional));
-        eventRelationshipsGroup.addVar("eventLinks",eventLinkType,eventRelationshipsIndex);
+        netCDF::NcCompoundType eventRelationshipType = eventRelationshipsGroup.addCompoundType("EventRelationship",sizeof(EventRelationship));
+        eventRelationshipType.addMember("eventId1",netCDF::ncInt,offsetof(EventRelationship, eventId1));
+        eventRelationshipType.addMember("eventId2",netCDF::ncInt,offsetof(EventRelationship, eventId2));
+        eventRelationshipType.addMember("bidirectional",netCDF::ncChar,offsetof(EventRelationship, bidirectional));
+        eventRelationshipsGroup.addVar("eventRelationships",eventRelationshipType,eventRelationshipsIndex);
 
         // Create fault event compound type and variable
         netCDF::NcCompoundType faultEventType = eventLogGroup.addCompoundType("FaultEvent",sizeof(FaultEvent));
@@ -266,7 +266,7 @@ LoopProjectFileResponse ExtractedInformation::GetStratigraphicLayers(netCDF::NcG
     return resp;
 }
 
-LoopProjectFileResponse ExtractedInformation::GetEventRelationships(netCDF::NcGroup* rootNode, std::vector<EventLink>& eventLinks, bool verbose)
+LoopProjectFileResponse ExtractedInformation::GetEventRelationships(netCDF::NcGroup* rootNode, std::vector<EventRelationship>& eventRelationships, bool verbose)
 {
     LoopProjectFileResponse resp = {0,""};
     auto groups = rootNode->getGroups();
@@ -275,12 +275,12 @@ LoopProjectFileResponse ExtractedInformation::GetEventRelationships(netCDF::NcGr
         auto eiGroups = extractedInformationGroup.getGroups();
         if (eiGroups.find("EventRelationships") != eiGroups.end()) {
             netCDF::NcGroup eventRelationshipsGroup = extractedInformationGroup.getGroup("EventRelationships");
-            netCDF::NcVar links = eventRelationshipsGroup.getVar("eventLinks");
+            netCDF::NcVar links = eventRelationshipsGroup.getVar("eventRelationships");
             for (size_t i=0;i<eventRelationshipsGroup.getDim("index").getSize();i++) {
-                EventLink eventLink;
+                EventRelationship eventRelationship;
                 std::vector<size_t> start; start.push_back(i);
-                links.getVar(start,&eventLink);
-                eventLinks.push_back(eventLink);
+                links.getVar(start,&eventRelationship);
+                eventRelationships.push_back(eventRelationship);
             }
         } else {
             resp = createErrorMsg(1,"No Event Relationships Group Node Present",verbose);
@@ -416,7 +416,7 @@ LoopProjectFileResponse ExtractedInformation::SetStratigraphicLayers(netCDF::NcG
     return resp;
 }
 
-LoopProjectFileResponse ExtractedInformation::SetEventRelationships(netCDF::NcGroup* rootNode, std::vector<EventLink> eventLinks, bool verbose)
+LoopProjectFileResponse ExtractedInformation::SetEventRelationships(netCDF::NcGroup* rootNode, std::vector<EventRelationship> eventRelationships, bool verbose)
 {
     LoopProjectFileResponse resp = {0,""};
     try {
@@ -431,9 +431,9 @@ LoopProjectFileResponse ExtractedInformation::SetEventRelationships(netCDF::NcGr
         }
         netCDF::NcGroup eventRelationshipsGroup = extractedInformationGroup.getGroup("EventRelationships");
         std::vector<size_t> start; start.push_back(0);
-        std::vector<size_t> count; count.push_back(eventLinks.size());
-        netCDF::NcVar links = eventRelationshipsGroup.getVar("eventLinks");
-        links.putVar(start,count,&(eventLinks[0]));
+        std::vector<size_t> count; count.push_back(eventRelationships.size());
+        netCDF::NcVar links = eventRelationshipsGroup.getVar("eventRelationships");
+        links.putVar(start,count,&(eventRelationships[0]));
     } catch (netCDF::exceptions::NcException &e) {
         std::cout << e.what();
         resp = createErrorMsg(1,"Failed to add event relationships to loop project file",verbose);

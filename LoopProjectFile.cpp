@@ -192,7 +192,7 @@ LoopProjectFileResponse GetStratigraphicLayers(std::string filename, std::vector
     LPF_OPEN_RUN(filename, ExtractedInformation::GetStratigraphicLayers, data, true, verbose);
 }
 
-LoopProjectFileResponse GetEventRelationships(std::string filename, std::vector<EventLink> &data, bool verbose)
+LoopProjectFileResponse GetEventRelationships(std::string filename, std::vector<EventRelationship> &data, bool verbose)
 {
     LPF_OPEN_RUN(filename, ExtractedInformation::GetEventRelationships, data, true, verbose);
 }
@@ -282,7 +282,7 @@ LoopProjectFileResponse SetStratigraphicLayers(std::string filename, std::vector
     LPF_OPEN_RUN(filename, ExtractedInformation::SetStratigraphicLayers, data, false, verbose);
 }
 
-LoopProjectFileResponse SetEventRelationships(std::string filename, std::vector<EventLink> data, bool verbose)
+LoopProjectFileResponse SetEventRelationships(std::string filename, std::vector<EventRelationship> data, bool verbose)
 {
     LPF_OPEN_RUN(filename, ExtractedInformation::SetEventRelationships, data, false, verbose);
 }

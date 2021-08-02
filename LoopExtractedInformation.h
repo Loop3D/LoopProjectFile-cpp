@@ -40,12 +40,12 @@ struct Event {
     }
 };
 
-/*! \brief A structure describing a link between events */
-struct EventLink {
-    int eventId1; /*!< The unique event identifier for the first event in the link (unique to all events types) */
-    int eventId2; /*!< The unique event identifier for the second event in the link (unique to all events types) */
+/*! \brief A structure describing a relationship between events */
+struct EventRelationship {
+    int eventId1; /*!< The unique event identifier for the first event in the relationship (unique to all events types) */
+    int eventId2; /*!< The unique event identifier for the second event in the relationship (unique to all events types) */
     char bidirectional; /*!< A flag to indicator a bidirectional relationship */
-    EventLink() {
+    EventRelationship() {
         eventId1 = 0;
         eventId2 = 0;
         bidirectional = 0;
@@ -236,15 +236,15 @@ LoopProjectFileResponse GetDiscontinuityEvents(netCDF::NcGroup* rootNode, std::v
 LoopProjectFileResponse GetStratigraphicLayers(netCDF::NcGroup* rootNode, std::vector<StratigraphicLayer>& layers, bool verbose=false);
 
 /*!
- * \brief Retrieves the list of event links from the loop project file
+ * \brief Retrieves the list of event relationships from the loop project file
  *
  * \param rootNode - the rootNode of the netCDF Loop project file
- * \param eventLinks - a reference to where the event link data is to be copied
+ * \param eventRelationships - a reference to where the event relationship data is to be copied
  * \param verbose - a flag to toggle verbose message printing
  *
- * \return Response with success/fail of event links retrieval with an error message if it failed
+ * \return Response with success/fail of event relationships retrieval with an error message if it failed
  */
-LoopProjectFileResponse GetEventRelationships(netCDF::NcGroup* rootNode, std::vector<EventLink>& eventLinks, bool verbose=false);
+LoopProjectFileResponse GetEventRelationships(netCDF::NcGroup* rootNode, std::vector<EventRelationship>& eventRelationships, bool verbose=false);
 
 /*!
  * \brief Sets fault event information to the loop project file
@@ -302,15 +302,15 @@ LoopProjectFileResponse SetDiscontinuityEvents(netCDF::NcGroup* rootNode, std::v
 LoopProjectFileResponse SetStratigraphicLayers(netCDF::NcGroup* rootNode, std::vector<StratigraphicLayer> layers, bool verbose=false);
 
 /*!
- * \brief Sets event link information in the loop project file
+ * \brief Sets event relationship information in the loop project file
  *
  * \param rootNode - the rootNode of the netCDF Loop project file
- * \param eventLinks - the event link data to be inserted 
+ * \param eventRelationships - the event relationship data to be inserted 
  * \param verbose - a flag to toggle verbose message printing
  *
- * \return Response with success/fail of event link insertion with an error message if it failed
+ * \return Response with success/fail of event relationship insertion with an error message if it failed
  */
-LoopProjectFileResponse SetEventRelationships(netCDF::NcGroup* rootNode, std::vector<EventLink> eventLinks, bool verbose=false);
+LoopProjectFileResponse SetEventRelationships(netCDF::NcGroup* rootNode, std::vector<EventRelationship> eventRelationships, bool verbose=false);
 
 } // namespace ExtractedInformation
 } // namespace LoopProjectFile

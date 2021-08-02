@@ -102,7 +102,7 @@ LoopProjectFileResponse GetFoldEvents(std::string filename, std::vector<FoldEven
 LoopProjectFileResponse GetFoliationEvents(std::string filename, std::vector<FoliationEvent> &data, bool verbose=false);
 LoopProjectFileResponse GetDiscontinuityEvents(std::string filename, std::vector<DiscontinuityEvent> &data, bool verbose=false);
 LoopProjectFileResponse GetStratigraphicLayers(std::string filename, std::vector<StratigraphicLayer> &data, bool verbose=false);
-LoopProjectFileResponse GetEventRelationships(std::string filename, std::vector<EventLink> &data, bool verbose=false);
+LoopProjectFileResponse GetEventRelationships(std::string filename, std::vector<EventRelationship> &data, bool verbose=false);
 /*!@}*/
 
 /*! @{
@@ -146,7 +146,7 @@ LoopProjectFileResponse SetFoldEvents(std::string filename, std::vector<FoldEven
 LoopProjectFileResponse SetFoliationEvents(std::string filename, std::vector<FoliationEvent> data, bool verbose=false);
 LoopProjectFileResponse SetDiscontinuityEvents(std::string filename, std::vector<DiscontinuityEvent> data, bool verbose=false);
 LoopProjectFileResponse SetStratigraphicLayers(std::string filename, std::vector<StratigraphicLayer> data, bool verbose=false);
-LoopProjectFileResponse SetEventRelationships(std::string filename, std::vector<EventLink> data, bool verbose=false);
+LoopProjectFileResponse SetEventRelationships(std::string filename, std::vector<EventRelationship> data, bool verbose=false);
 /*!@}*/
 
 /*! @{
