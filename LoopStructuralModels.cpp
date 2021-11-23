@@ -146,7 +146,7 @@ LoopProjectFileResponse StructuralModels::GetStructuralModel(netCDF::NcGroup* ro
             count.push_back(dataShape[0]); count.push_back(dataShape[1]); count.push_back(dataShape[2]); count.push_back(1);
             dataVar.getVar(start,count,&data[0]);
         }
-    } catch (netCDF::exceptions::NcException& e) {
+    } catch (netCDF::exceptions::NcException&) {
         // if (verbose) std::cout << e.what() << std::endl;
         resp = createErrorMsg(1, "No structural model in loop project file",verbose);
     }

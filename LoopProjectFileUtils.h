@@ -4,6 +4,7 @@
 #include <string>
 
 #define LOOP_NAME_LENGTH 30
+#define LOOP_GROUP_NAME_LENGTH 30
 #define LOOP_SUPERGROUP_NAME_LENGTH 30
 
 #ifdef __linux__

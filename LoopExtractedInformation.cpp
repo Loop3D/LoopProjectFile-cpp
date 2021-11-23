@@ -18,6 +18,7 @@ LoopProjectFileResponse ExtractedInformation::CreateExtractedInformationGroup(ne
 {
     LoopProjectFileResponse resp = {0,""};
     std::vector<int> length; length.push_back(LOOP_NAME_LENGTH);
+    std::vector<int> groupLength; groupLength.push_back(LOOP_GROUP_NAME_LENGTH);
     std::vector<int> supergroupLength; supergroupLength.push_back(LOOP_SUPERGROUP_NAME_LENGTH);
     std::vector<int> colourLength; colourLength.push_back(7);
     try {
@@ -42,6 +43,7 @@ LoopProjectFileResponse ExtractedInformation::CreateExtractedInformationGroup(ne
         stratigraphicLayerType.addMember("minAge",netCDF::ncDouble,offsetof(StratigraphicLayer, minAge));
         stratigraphicLayerType.addMember("maxAge",netCDF::ncDouble,offsetof(StratigraphicLayer, maxAge));
         stratigraphicLayerType.addMember("name",netCDF::ncChar,offsetof(StratigraphicLayer, name),length);
+        stratigraphicLayerType.addMember("group",netCDF::ncChar,offsetof(StratigraphicLayer, group),groupLength);
         stratigraphicLayerType.addMember("supergroup",netCDF::ncChar,offsetof(StratigraphicLayer, supergroup),supergroupLength);
         stratigraphicLayerType.addMember("enabled",netCDF::ncChar,offsetof(StratigraphicLayer, enabled));
         stratigraphicLayerType.addMember("rank",netCDF::ncInt,offsetof(StratigraphicLayer, rank));
@@ -60,6 +62,8 @@ LoopProjectFileResponse ExtractedInformation::CreateExtractedInformationGroup(ne
         eventRelationshipType.addMember("eventId1",netCDF::ncInt,offsetof(EventRelationship, eventId1));
         eventRelationshipType.addMember("eventId2",netCDF::ncInt,offsetof(EventRelationship, eventId2));
         eventRelationshipType.addMember("bidirectional",netCDF::ncChar,offsetof(EventRelationship, bidirectional));
+        eventRelationshipType.addMember("angle",netCDF::ncDouble,offsetof(EventRelationship, angle));
+        eventRelationshipType.addMember("type",netCDF::ncInt,offsetof(EventRelationship, type));
         eventRelationshipsGroup.addVar("eventRelationships",eventRelationshipType,eventRelationshipsIndex);
 
         // Create fault event compound type and variable
@@ -68,6 +72,7 @@ LoopProjectFileResponse ExtractedInformation::CreateExtractedInformationGroup(ne
         faultEventType.addMember("minAge",netCDF::ncDouble,offsetof(FaultEvent, minAge));
         faultEventType.addMember("maxAge",netCDF::ncDouble,offsetof(FaultEvent, maxAge));
         faultEventType.addMember("name",netCDF::ncChar,offsetof(FaultEvent, name),length);
+        faultEventType.addMember("group",netCDF::ncChar,offsetof(FaultEvent, group),groupLength);
         faultEventType.addMember("supergroup",netCDF::ncChar,offsetof(FaultEvent, supergroup),supergroupLength);
         faultEventType.addMember("enabled",netCDF::ncChar,offsetof(FaultEvent, enabled));
         faultEventType.addMember("rank",netCDF::ncInt,offsetof(FaultEvent, rank));
@@ -95,6 +100,7 @@ LoopProjectFileResponse ExtractedInformation::CreateExtractedInformationGroup(ne
         foldEventType.addMember("minAge",netCDF::ncDouble,offsetof(FoldEvent, minAge));
         foldEventType.addMember("maxAge",netCDF::ncDouble,offsetof(FoldEvent, maxAge));
         foldEventType.addMember("name",netCDF::ncChar,offsetof(FoldEvent, name),length);
+        foldEventType.addMember("group",netCDF::ncChar,offsetof(FoldEvent, group),groupLength);
         foldEventType.addMember("supergroup",netCDF::ncChar,offsetof(FoldEvent, supergroup),supergroupLength);
         foldEventType.addMember("enabled",netCDF::ncChar,offsetof(FoldEvent, enabled));
         foldEventType.addMember("rank",netCDF::ncInt,offsetof(FoldEvent, rank));
@@ -114,6 +120,7 @@ LoopProjectFileResponse ExtractedInformation::CreateExtractedInformationGroup(ne
         foliationEventType.addMember("minAge",netCDF::ncDouble,offsetof(FoliationEvent, minAge));
         foliationEventType.addMember("maxAge",netCDF::ncDouble,offsetof(FoliationEvent, maxAge));
         foliationEventType.addMember("name",netCDF::ncChar,offsetof(FoliationEvent, name),length);
+        foliationEventType.addMember("group",netCDF::ncChar,offsetof(FoliationEvent, group),groupLength);
         foliationEventType.addMember("supergroup",netCDF::ncChar,offsetof(FoliationEvent, supergroup),supergroupLength);
         foliationEventType.addMember("enabled",netCDF::ncChar,offsetof(FoliationEvent, enabled));
         foliationEventType.addMember("rank",netCDF::ncInt,offsetof(FoliationEvent, rank));
@@ -128,6 +135,7 @@ LoopProjectFileResponse ExtractedInformation::CreateExtractedInformationGroup(ne
         discontinuityEventType.addMember("minAge",netCDF::ncDouble,offsetof(DiscontinuityEvent, minAge));
         discontinuityEventType.addMember("maxAge",netCDF::ncDouble,offsetof(DiscontinuityEvent, maxAge));
         discontinuityEventType.addMember("name",netCDF::ncChar,offsetof(DiscontinuityEvent, name),length);
+        discontinuityEventType.addMember("group",netCDF::ncChar,offsetof(DiscontinuityEvent, group),groupLength);
         discontinuityEventType.addMember("supergroup",netCDF::ncChar,offsetof(DiscontinuityEvent, supergroup),supergroupLength);
         discontinuityEventType.addMember("enabled",netCDF::ncChar,offsetof(DiscontinuityEvent, enabled));
         discontinuityEventType.addMember("rank",netCDF::ncInt,offsetof(DiscontinuityEvent, rank));

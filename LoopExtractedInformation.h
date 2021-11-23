@@ -16,6 +16,16 @@ enum EventType {
     NUM_EVENT_TYPES
 };
 
+enum RelationshipType {
+    INVALIDTYPE = -1,
+    STRATA_STRATA,
+    FAULT_STRATA,
+    FAULT_FAULT_SPLAY,
+    FAULT_FAULT_ABUT,
+    FAULT_FAULT_OVERPRINT,
+    NUM_RELATIONSHIP_TYPES
+};
+
 /*! \brief A structure describing a generic event */
 struct Event {
     int eventId; /*!< A unique event identifier (unique to all events types) */
@@ -24,6 +34,7 @@ struct Event {
     double maxAge;
     /*!@}*/
     char name[LOOP_NAME_LENGTH]; /*!< The name of this event */
+    char group[LOOP_GROUP_NAME_LENGTH]; /*!< The name of this event's group */
     char supergroup[LOOP_SUPERGROUP_NAME_LENGTH]; /*!< The name of this event's supergroup */
     char enabled; /*!< A flag to enable/disable this event from modelling calculations */
     int rank; /*!< A placeholder for permutation calculations */
@@ -45,6 +56,8 @@ struct EventRelationship {
     int eventId1; /*!< The unique event identifier for the first event in the relationship (unique to all events types) */
     int eventId2; /*!< The unique event identifier for the second event in the relationship (unique to all events types) */
     char bidirectional; /*!< A flag to indicator a bidirectional relationship */
+    double angle; /*!< The angle if calculable of the two intersecting events */
+    RelationshipType type; /*!< The type of intersection */
     EventRelationship() {
         eventId1 = 0;
         eventId2 = 0;
