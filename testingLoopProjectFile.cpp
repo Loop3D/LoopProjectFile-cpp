@@ -147,8 +147,40 @@ int testLoopProjectFileSetFunctions(std::string filename)
     if (resp.errorCode) std::cout << resp.errorMessage << std::endl;
     errors += resp.errorCode;
 
+    // check contacts
+    std::vector<LoopProjectFile::ContactObservation> contactObservations;
+    for (auto i=0; i<5; i++) {
+        LoopProjectFile::ContactObservation contactObs;
+        contactObs.northing = i;
+        contactObs.easting = i;
+        contactObs.altitude = i;
+        contactObservations.push_back(contactObs);
+    }
+    resp = LoopProjectFile::SetContacts(filename,contactObservations,true);
+    if (resp.errorCode) std::cout << resp.errorMessage << std::endl;
+    errors += resp.errorCode;
+
+    // check drillhole observations
+    std::vector<LoopProjectFile::DrillholeObservation> drillholeObservations;
+    for (auto i=0; i<5; i++) {
+        LoopProjectFile::DrillholeObservation drillholeObs;
+        drillholeObs.northing = i;
+        drillholeObs.easting = i;
+        drillholeObs.altitude = i;
+        drillholeObs.baseEasting = i;
+        drillholeObs.baseNorthing = i;
+        drillholeObs.baseAltitude = -i;
+        drillholeObs.dip = 90.0 + i;
+        drillholeObs.dipdir = 135.0 + 1;
+        drillholeObservations.push_back(drillholeObs);
+    }
+    resp = LoopProjectFile::SetDrillholeObservations(filename,drillholeObservations,true);
+    if (resp.errorCode) std::cout << resp.errorMessage << std::endl;
+    errors += resp.errorCode;
+
     return errors;
 }
+
 int testLoopProjectFileGetFunctions(std::string filename)
 {
     int errors = 0;
@@ -226,14 +258,42 @@ int testLoopProjectFileGetFunctions(std::string filename)
     errors += resp.errorCode;
     if (dataShape.size() != 3 || dataShape[0] != shapeX || dataShape[1] != shapeY || dataShape[2] != shapeZ) {
         std::cout << "Data Shape returned does not match original insertion" << std::endl;
+    } else {
+        std::cout << "Data Shape of structural model matches original" << std::endl;
         bool broken = false;
         for (auto i=0; i<dataShape[0] && !broken; i++)
             for (auto j=0; j<dataShape[1] && !broken; j++)
                 for (auto k=0; k<dataShape[2] && !broken; k++)
                     if (data[i*dataShape[1]*dataShape[2] + j*dataShape[2] + k] != i+j+k) {
-                        std::cout << "Values did not return the same" << std::endl;
+                        std::cout << "  but values did not return the same" << std::endl;
                         broken = true;
                     }
+    }
+    // Check that those contacts are in the file
+    std::vector<LoopProjectFile::ContactObservation> contactObservations;
+    resp = LoopProjectFile::GetContacts(filename,contactObservations,true);
+    if (resp.errorCode) std::cout << resp.errorMessage << std::endl;
+    errors += resp.errorCode;
+    for (auto i=0; i<contactObservations.size(); i++) {
+        std::cout << "Contacts Obs for event " << contactObservations[i].eventId << ": " <<
+        "(" << contactObservations[i].easting << "," << contactObservations[i].northing << "," << contactObservations[i].altitude << ") "
+        << (int)contactObservations[i].type
+        << std::endl;
+    }
+    
+    // Check that those drillhole observations are in the file
+    std::vector<LoopProjectFile::DrillholeObservation> drillholeObservations;
+    resp = LoopProjectFile::GetDrillholeObservations(filename,drillholeObservations,true);
+    if (resp.errorCode) std::cout << resp.errorMessage << std::endl;
+    errors += resp.errorCode;
+    std::cout << "Number of drillhole observations = " << drillholeObservations.size() << std::endl;
+    for (auto i=0; i<drillholeObservations.size(); i++) {
+        std::cout << "drillholes Obs for event " << drillholeObservations[i].eventId << ": " <<
+        "(" << drillholeObservations[i].easting << "," << drillholeObservations[i].northing << "," << drillholeObservations[i].altitude << ") "
+        << (int)drillholeObservations[i].type
+        << ", (" << drillholeObservations[i].baseEasting << "," << drillholeObservations[i].baseNorthing << "," << drillholeObservations[i].baseAltitude << "), "
+        << drillholeObservations[i].dipdir << ", " << drillholeObservations[i].dip
+        << std::endl;
     }
 
     return errors;

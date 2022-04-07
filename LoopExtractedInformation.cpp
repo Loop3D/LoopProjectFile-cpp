@@ -30,6 +30,10 @@ LoopProjectFileResponse ExtractedInformation::CreateExtractedInformationGroup(ne
         netCDF::NcGroup eventRelationshipsGroup = extractedInformationGroup->getGroup("EventRelationships");
         netCDF::NcDim eventRelationshipsIndex = eventRelationshipsGroup.addDim("index");
 
+        extractedInformationGroup->addGroup("DrillholeInformation");
+        netCDF::NcGroup drillholeInformationGroup = extractedInformationGroup->getGroup("DrillholeInformation");
+        netCDF::NcDim drillholeInformationIndex = drillholeInformationGroup.addDim("index");
+
         extractedInformationGroup->addGroup("EventLog");
         netCDF::NcGroup eventLogGroup = extractedInformationGroup->getGroup("EventLog");
         netCDF::NcDim faultEventIndex = eventLogGroup.addDim("faultEventIndex");
@@ -299,6 +303,32 @@ LoopProjectFileResponse ExtractedInformation::GetEventRelationships(netCDF::NcGr
     return resp;
 }
 
+LoopProjectFileResponse ExtractedInformation::GetDrillholeDescriptions(netCDF::NcGroup* rootNode, std::vector<DrillholeDescription>& drillholeDescriptions, bool verbose)
+{
+    LoopProjectFileResponse resp = {0,""};
+    auto groups = rootNode->getGroups();
+    if (groups.find("ExtractedInformation") != groups.end()) {
+        netCDF::NcGroup extractedInformationGroup = rootNode->getGroup("ExtractedInformation");
+        auto eiGroups = extractedInformationGroup.getGroups();
+        if (eiGroups.find("DrillholeInformation") != eiGroups.end()) {
+            netCDF::NcGroup drillholeInformationGroup = extractedInformationGroup.getGroup("DrillholeInformation");
+            netCDF::NcVar links = drillholeInformationGroup.getVar("drillholeDescriptions");
+            for (size_t i=0;i<drillholeInformationGroup.getDim("index").getSize();i++) {
+                DrillholeDescription drillholeDescription;
+                EventRelationship eventRelationship;
+                std::vector<size_t> start; start.push_back(i);
+                links.getVar(start,&drillholeDescription);
+                drillholeDescriptions.push_back(drillholeDescription);
+            }
+        } else {
+            resp = createErrorMsg(1,"No Drillhole Information Group Node Present",verbose);
+        }
+    } else {
+        resp = createErrorMsg(1,"No Extracted Information Group Node Present",verbose);
+    }
+    return resp;
+}
+
 LoopProjectFileResponse ExtractedInformation::SetFaultEvents(netCDF::NcGroup* rootNode, std::vector<FaultEvent> events, bool verbose)
 {
     LoopProjectFileResponse resp = {0,""};
@@ -445,6 +475,31 @@ LoopProjectFileResponse ExtractedInformation::SetEventRelationships(netCDF::NcGr
     } catch (netCDF::exceptions::NcException &e) {
         std::cout << e.what();
         resp = createErrorMsg(1,"Failed to add event relationships to loop project file",verbose);
+    }
+    return resp;
+}
+
+LoopProjectFileResponse ExtractedInformation::SetDrillholeDescriptions(netCDF::NcGroup* rootNode, std::vector<DrillholeDescription> drillholeDescriptions, bool verbose)
+{
+    LoopProjectFileResponse resp = {0,""};
+    try {
+        auto groups = rootNode->getGroups();
+        if (groups.find("ExtractedInformation") == groups.end()) {
+            rootNode->addGroup("ExtractedInformation");
+        }
+        netCDF::NcGroup extractedInformationGroup = rootNode->getGroup("ExtractedInformation");
+        auto eiGroups = extractedInformationGroup.getGroups();
+        if (eiGroups.find("EventRelationships") == eiGroups.end()) {
+            resp = CreateExtractedInformationGroup(&extractedInformationGroup);
+        }
+        netCDF::NcGroup drillholeInformationGroup = extractedInformationGroup.getGroup("DrillholeInformation");
+        std::vector<size_t> start; start.push_back(0);
+        std::vector<size_t> count; count.push_back(drillholeDescriptions.size());
+        netCDF::NcVar links = drillholeInformationGroup.getVar("drillholeDescriptions");
+        links.putVar(start,count,&(drillholeDescriptions[0]));
+    } catch (netCDF::exceptions::NcException &e) {
+        std::cout << e.what();
+        resp = createErrorMsg(1,"Failed to add drillhole descriptions to loop project file",verbose);
     }
     return resp;
 }

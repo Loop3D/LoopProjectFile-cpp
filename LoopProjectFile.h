@@ -97,12 +97,15 @@ LoopProjectFileResponse GetFoldObservations(std::string filename, std::vector<Fo
 LoopProjectFileResponse GetFoliationObservations(std::string filename, std::vector<FoliationObservation> &data, bool verbose=false);
 LoopProjectFileResponse GetDiscontinuityObservations(std::string filename, std::vector<DiscontinuityObservation> &data, bool verbose=false);
 LoopProjectFileResponse GetStratigraphicObservations(std::string filename, std::vector<StratigraphicObservation> &data, bool verbose=false);
+LoopProjectFileResponse GetContacts(std::string filename, std::vector<ContactObservation> &data, bool verbose=false);
+LoopProjectFileResponse GetDrillholeObservations(std::string filename, std::vector<DrillholeObservation> &data, bool verbose=false);
 LoopProjectFileResponse GetFaultEvents(std::string filename, std::vector<FaultEvent> &data, bool verbose=false);
 LoopProjectFileResponse GetFoldEvents(std::string filename, std::vector<FoldEvent> &data, bool verbose=false);
 LoopProjectFileResponse GetFoliationEvents(std::string filename, std::vector<FoliationEvent> &data, bool verbose=false);
 LoopProjectFileResponse GetDiscontinuityEvents(std::string filename, std::vector<DiscontinuityEvent> &data, bool verbose=false);
 LoopProjectFileResponse GetStratigraphicLayers(std::string filename, std::vector<StratigraphicLayer> &data, bool verbose=false);
 LoopProjectFileResponse GetEventRelationships(std::string filename, std::vector<EventRelationship> &data, bool verbose=false);
+LoopProjectFileResponse GetDrillholeDescriptions(std::string filename, std::vector<DrillholeDescription> &data, bool verbose=false);
 /*!@}*/
 
 /*! @{
@@ -141,12 +144,15 @@ LoopProjectFileResponse SetFoldObservations(std::string filename, std::vector<Fo
 LoopProjectFileResponse SetFoliationObservations(std::string filename, std::vector<FoliationObservation> data, bool verbose=false);
 LoopProjectFileResponse SetDiscontinuityObservations(std::string filename, std::vector<DiscontinuityObservation> data, bool verbose=false);
 LoopProjectFileResponse SetStratigraphicObservations(std::string filename, std::vector<StratigraphicObservation> data, bool verbose=false);
+LoopProjectFileResponse SetContacts(std::string filename, std::vector<ContactObservation> data, bool verbose=false);
+LoopProjectFileResponse SetDrillholeObservations(std::string filename, std::vector<DrillholeObservation> data, bool verbose=false);
 LoopProjectFileResponse SetFaultEvents(std::string filename, std::vector<FaultEvent> data, bool verbose=false);
 LoopProjectFileResponse SetFoldEvents(std::string filename, std::vector<FoldEvent> data, bool verbose=false);
 LoopProjectFileResponse SetFoliationEvents(std::string filename, std::vector<FoliationEvent> data, bool verbose=false);
 LoopProjectFileResponse SetDiscontinuityEvents(std::string filename, std::vector<DiscontinuityEvent> data, bool verbose=false);
 LoopProjectFileResponse SetStratigraphicLayers(std::string filename, std::vector<StratigraphicLayer> data, bool verbose=false);
 LoopProjectFileResponse SetEventRelationships(std::string filename, std::vector<EventRelationship> data, bool verbose=false);
+LoopProjectFileResponse SetDrillholeDescriptions(std::string filename, std::vector<DrillholeDescription> data, bool verbose=false);
 /*!@}*/
 
 /*! @{

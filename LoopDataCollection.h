@@ -19,6 +19,8 @@ enum ObservationType {
     FOLIATIONOBSERVATION,
     DISCONTINUITYOBSERVATION,
     STRATIGRAPHICOBSERVATION,
+    CONTACTOBSERVATION,
+    DRILLHOLEOBSERVATION,
     NUM_OBSERVATION_TYPES
 };
 /*! \brief A structure describing a generic observation */
@@ -202,6 +204,29 @@ struct StratigraphicObservation : public Observation {
     }
 };
 
+/*! \brief A structure describing a single stratigraphic contact observation */
+struct ContactObservation : public Observation {
+    ContactObservation() : Observation() {
+        type = CONTACTOBSERVATION;
+    }
+};
+
+/*! \brief A structure describing a single drillhole observation */
+struct DrillholeObservation : public Observation {
+    double baseEasting;
+    double baseNorthing;
+    double baseAltitude;
+    double dip;
+    double dipdir;
+    DrillholeObservation() : Observation() {
+        type = DRILLHOLEOBSERVATION;
+        baseEasting = 0;
+        baseNorthing = 0;
+        baseAltitude = 0;
+        dip = 0;
+        dipdir = 0;
+    }
+};
 
 namespace DataCollection {
 
@@ -225,6 +250,26 @@ bool CheckDataCollectionValid(netCDF::NcGroup* rootNode, bool verbose=false);
  * \return Response with success/fail of structure creation with an error message if it failed
  */
 LoopProjectFileResponse CreateObservationGroup(netCDF::NcGroup* dataCollectionGroup, bool verbose=false);
+
+/*!
+ * \brief Creates the data collection contact structure in the given netCDF root node
+ *
+ * \param dataCollectionGroup - a pointer to the netCDF Group node "DataCollection"
+ * \param verbose - a flag to toggle verbose message printing
+ *
+ * \return Response with success/fail of structure creation with an error message if it failed
+ */
+LoopProjectFileResponse CreateContactGroup(netCDF::NcGroup* dataCollectionGroup, bool verbose=false);
+
+/*!
+ * \brief Creates the data collection drillhole structure in the given netCDF root node
+ *
+ * \param dataCollectionGroup - a pointer to the netCDF Group node "DataCollection"
+ * \param verbose - a flag to toggle verbose message printing
+ *
+ * \return Response with success/fail of structure creation with an error message if it failed
+ */
+LoopProjectFileResponse CreateDrillholeGroup(netCDF::NcGroup* dataCollectionGroup, bool verbose=false);
 
 /*!
  * \brief Retrieves fault observation data from the loop project file
@@ -280,6 +325,28 @@ LoopProjectFileResponse GetDiscontinuityObservations(netCDF::NcGroup* rootNode, 
  * \return Response with success/fail of observation data retrieval with an error message if it failed
  */
 LoopProjectFileResponse GetStratigraphicObservations(netCDF::NcGroup* rootNode, std::vector<StratigraphicObservation>& observations, bool verbose=false);
+
+/*!
+ * \brief Retrieves stratigraphic contact observation data from the loop project file
+ *
+ * \param rootNode - the rootNode of the netCDF Loop project file
+ * \param observations - a reference to where the observation data is to be copied 
+ * \param verbose - a flag to toggle verbose message printing
+ *
+ * \return Response with success/fail of observation data retrieval with an error message if it failed
+ */
+LoopProjectFileResponse GetContactObservations(netCDF::NcGroup* rootNode, std::vector<ContactObservation>& observations, bool verbose=false);
+
+/*!
+ * \brief Retrieves drillhole observation data from the loop project file
+ *
+ * \param rootNode - the rootNode of the netCDF Loop project file
+ * \param observations - a reference to where the observation data is to be copied 
+ * \param verbose - a flag to toggle verbose message printing
+ *
+ * \return Response with success/fail of observation data retrieval with an error message if it failed
+ */
+LoopProjectFileResponse GetDrillholeObservations(netCDF::NcGroup* rootNode, std::vector<DrillholeObservation>& observations, bool verbose=false);
 
 /*!
  * \brief Retrieves data collection configuration from the loop project file
@@ -357,6 +424,28 @@ LoopProjectFileResponse SetDiscontinuityObservations(netCDF::NcGroup* rootNode, 
  * \return Response with success/fail of observation data insertion with an error message if it failed
  */
 LoopProjectFileResponse SetStratigraphicObservations(netCDF::NcGroup* rootNode, std::vector<StratigraphicObservation> observations, bool verbose=false);
+
+/*!
+ * \brief Sets stratigraphic contact observation data to the loop project file
+ *
+ * \param rootNode - the rootNode of the netCDF Loop project file
+ * \param observations - the observation data to be inserted 
+ * \param verbose - a flag to toggle verbose message printing
+ *
+ * \return Response with success/fail of observation data insertion with an error message if it failed
+ */
+LoopProjectFileResponse SetContactObservations(netCDF::NcGroup* rootNode, std::vector<ContactObservation> observations, bool verbose=false);
+
+/*!
+ * \brief Sets drillhole observation data to the loop project file
+ *
+ * \param rootNode - the rootNode of the netCDF Loop project file
+ * \param observations - the observation data to be inserted 
+ * \param verbose - a flag to toggle verbose message printing
+ *
+ * \return Response with success/fail of observation data insertion with an error message if it failed
+ */
+LoopProjectFileResponse SetDrillholeObservations(netCDF::NcGroup* rootNode, std::vector<DrillholeObservation> observations, bool verbose=false);
 
 /*!
  * \brief Sets data collection configuration to the loop project file

@@ -167,6 +167,16 @@ LoopProjectFileResponse GetStratigraphicObservations(std::string filename, std::
     LPF_OPEN_RUN(filename, DataCollection::GetStratigraphicObservations, data, true, verbose);
 }
 
+LoopProjectFileResponse GetContacts(std::string filename, std::vector<ContactObservation> &data, bool verbose)
+{
+    LPF_OPEN_RUN(filename, DataCollection::GetContactObservations, data, true, verbose);
+}
+
+LoopProjectFileResponse GetDrillholeObservations(std::string filename, std::vector<DrillholeObservation> &data, bool verbose)
+{
+    LPF_OPEN_RUN(filename, DataCollection::GetDrillholeObservations, data, true, verbose);
+}
+
 LoopProjectFileResponse GetFaultEvents(std::string filename, std::vector<FaultEvent> &data, bool verbose)
 {
     LPF_OPEN_RUN(filename, ExtractedInformation::GetFaultEvents, data, true, verbose);
@@ -195,6 +205,11 @@ LoopProjectFileResponse GetStratigraphicLayers(std::string filename, std::vector
 LoopProjectFileResponse GetEventRelationships(std::string filename, std::vector<EventRelationship> &data, bool verbose)
 {
     LPF_OPEN_RUN(filename, ExtractedInformation::GetEventRelationships, data, true, verbose);
+}
+
+LoopProjectFileResponse GetDrillholeDescriptions(std::string filename, std::vector<DrillholeDescription> &data, bool verbose)
+{
+    LPF_OPEN_RUN(filename, ExtractedInformation::GetDrillholeDescriptions, data, true, verbose);
 }
 
 LoopProjectFileResponse GetStructuralModel(std::string filename, std::vector<float> &data, std::vector<int> &dataShape, int index, bool verbose)
@@ -257,6 +272,16 @@ LoopProjectFileResponse SetStratigraphicObservations(std::string filename, std::
     LPF_OPEN_RUN(filename, DataCollection::SetStratigraphicObservations, data, false, verbose);
 }
 
+LoopProjectFileResponse SetContacts(std::string filename, std::vector<ContactObservation> data, bool verbose)
+{
+    LPF_OPEN_RUN(filename, DataCollection::SetContactObservations, data, false, verbose);
+}
+
+LoopProjectFileResponse SetDrillholeObservations(std::string filename, std::vector<DrillholeObservation> data, bool verbose)
+{
+    LPF_OPEN_RUN(filename, DataCollection::SetDrillholeObservations, data, false, verbose);
+}
+
 LoopProjectFileResponse SetFaultEvents(std::string filename, std::vector<FaultEvent> data, bool verbose)
 {
     LPF_OPEN_RUN(filename, ExtractedInformation::SetFaultEvents, data, false, verbose);
@@ -285,6 +310,11 @@ LoopProjectFileResponse SetStratigraphicLayers(std::string filename, std::vector
 LoopProjectFileResponse SetEventRelationships(std::string filename, std::vector<EventRelationship> data, bool verbose)
 {
     LPF_OPEN_RUN(filename, ExtractedInformation::SetEventRelationships, data, false, verbose);
+}
+
+LoopProjectFileResponse SetDrillholeDescriptions(std::string filename, std::vector<DrillholeDescription> data, bool verbose)
+{
+    LPF_OPEN_RUN(filename, ExtractedInformation::SetDrillholeDescriptions, data, false, verbose);
 }
 
 LoopProjectFileResponse SetStructuralModel(std::string filename, std::vector<float> data, std::vector<int> dataShape, int index, bool verbose)

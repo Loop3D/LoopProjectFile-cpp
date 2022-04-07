@@ -170,6 +170,22 @@ struct StratigraphicLayer : public Event {
     }
 };
 
+/*! \brief A structure describing a drillhole */
+struct DrillholeDescription {
+    int collarId; /*!< The unique event identifier for the drillhole (unique to all drillholes) */
+    char name[LOOP_NAME_LENGTH]; /*!< The name of this drillhole */
+    double easting; /*!< The easting at the top of the drillhole */
+    double northing; /*!< The northing at the top of the drillhole */
+    double altitude; /*!< The altitude at the top of the drillhole */
+    DrillholeDescription() {
+        collarId = 0;
+        easting = 0;
+        northing = 0;
+        altitude = 0;
+        for (auto i=0;i<LOOP_NAME_LENGTH;i++) name[i] = 0;
+    }
+};
+
 namespace ExtractedInformation {
 
 /*! 
@@ -260,6 +276,17 @@ LoopProjectFileResponse GetStratigraphicLayers(netCDF::NcGroup* rootNode, std::v
 LoopProjectFileResponse GetEventRelationships(netCDF::NcGroup* rootNode, std::vector<EventRelationship>& eventRelationships, bool verbose=false);
 
 /*!
+ * \brief Retrieves the list of drillhole descriptions from the loop project file
+ *
+ * \param rootNode - the rootNode of the netCDF Loop project file
+ * \param drillholeDescriptions - a reference to where the drillhole data is to be copied
+ * \param verbose - a flag to toggle verbose message printing
+ *
+ * \return Response with success/fail of event relationships retrieval with an error message if it failed
+ */
+LoopProjectFileResponse GetDrillholeDescriptions(netCDF::NcGroup* rootNode, std::vector<DrillholeDescription>& drillholeDescriptions, bool verbose=false);
+
+/*!
  * \brief Sets fault event information to the loop project file
  *
  * \param rootNode - the rootNode of the netCDF Loop project file
@@ -324,6 +351,17 @@ LoopProjectFileResponse SetStratigraphicLayers(netCDF::NcGroup* rootNode, std::v
  * \return Response with success/fail of event relationship insertion with an error message if it failed
  */
 LoopProjectFileResponse SetEventRelationships(netCDF::NcGroup* rootNode, std::vector<EventRelationship> eventRelationships, bool verbose=false);
+
+/*!
+ * \brief Sets drillhole information in the loop project file
+ *
+ * \param rootNode - the rootNode of the netCDF Loop project file
+ * \param eventRelationships - the drillhole data to be inserted 
+ * \param verbose - a flag to toggle verbose message printing
+ *
+ * \return Response with success/fail of event relationship insertion with an error message if it failed
+ */
+LoopProjectFileResponse SetDrillholeDescriptions(netCDF::NcGroup* rootNode, std::vector<DrillholeDescription> drillholeDescriptions, bool verbose=false);
 
 } // namespace ExtractedInformation
 } // namespace LoopProjectFile
