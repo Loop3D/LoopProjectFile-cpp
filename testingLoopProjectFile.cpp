@@ -167,11 +167,11 @@ int testLoopProjectFileSetFunctions(std::string filename)
         drillholeObs.northing = i;
         drillholeObs.easting = i;
         drillholeObs.altitude = i;
-        drillholeObs.baseEasting = i;
-        drillholeObs.baseNorthing = i;
-        drillholeObs.baseAltitude = -i;
-        drillholeObs.dip = 90.0 + i;
-        drillholeObs.dipdir = 135.0 + 1;
+        drillholeObs.toEasting = i;
+        drillholeObs.toNorthing = i;
+        drillholeObs.toAltitude = -i;
+        drillholeObs.from = 90.0 + i;
+        drillholeObs.to = 135.0 + 1;
         drillholeObservations.push_back(drillholeObs);
     }
     resp = LoopProjectFile::SetDrillholeObservations(filename,drillholeObservations,true);
@@ -291,8 +291,8 @@ int testLoopProjectFileGetFunctions(std::string filename)
         std::cout << "drillholes Obs for event " << drillholeObservations[i].eventId << ": " <<
         "(" << drillholeObservations[i].easting << "," << drillholeObservations[i].northing << "," << drillholeObservations[i].altitude << ") "
         << (int)drillholeObservations[i].type
-        << ", (" << drillholeObservations[i].baseEasting << "," << drillholeObservations[i].baseNorthing << "," << drillholeObservations[i].baseAltitude << "), "
-        << drillholeObservations[i].dipdir << ", " << drillholeObservations[i].dip
+        << ", (" << drillholeObservations[i].toEasting << "," << drillholeObservations[i].toNorthing << "," << drillholeObservations[i].toAltitude << "), "
+        << drillholeObservations[i].from << ", " << drillholeObservations[i].to
         << std::endl;
     }
 

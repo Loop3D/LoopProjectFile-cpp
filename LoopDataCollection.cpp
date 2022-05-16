@@ -127,24 +127,54 @@ LoopProjectFileResponse DataCollection::CreateContactGroup(netCDF::NcGroup* data
 LoopProjectFileResponse DataCollection::CreateDrillholeGroup(netCDF::NcGroup* dataCollectionGroup, bool verbose)
 {
     LoopProjectFileResponse resp = {0,""};
+    std::vector<int> drillholePropertyCodeLength; drillholePropertyCodeLength.push_back(LOOP_DRILLHOLE_PROPERTY_CODE_LENGTH);
+    std::vector<int> drillholeProperty1Length; drillholeProperty1Length.push_back(LOOP_DRILLHOLE_PROPERTY1_LENGTH);
+    std::vector<int> drillholeProperty2Length; drillholeProperty2Length.push_back(LOOP_DRILLHOLE_PROPERTY2_LENGTH);
+    std::vector<int> drillholeUnitLength; drillholeUnitLength.push_back(LOOP_DRILLHOLE_UNIT_LENGTH);
+    std::vector<int> drillholePropertyNameLength; drillholeUnitLength.push_back(LOOP_DRILLHOLE_PROPERTY_NAME_LENGTH);
+    std::vector<int> drillholePropertyValueLength; drillholeUnitLength.push_back(LOOP_DRILLHOLE_PROPERTY_VALUE_LENGTH);
+    std::vector<int> drillholeSurveyUnitLength; drillholeSurveyUnitLength.push_back(LOOP_DRILLHOLE_SURVEY_UNIT_LENGTH);
     try {
         dataCollectionGroup->addGroup("Drillholes");
         netCDF::NcGroup drillholeGroup = dataCollectionGroup->getGroup("Drillholes");
-        netCDF::NcDim drillholeIndex = drillholeGroup.addDim("index");
+        netCDF::NcDim drillholeObservationIndex = drillholeGroup.addDim("drillholeObservationIndex");
+        netCDF::NcDim drillholePropertyIndex = drillholeGroup.addDim("drillholePropertyIndex");
+        netCDF::NcDim drillholeSurveyIndex = drillholeGroup.addDim("drillholeSurveyIndex");
 
-        // Create fault observation compound type and variable
+        // Create drillhole observation compound type and variable
         netCDF::NcCompoundType drillholeObservationType = drillholeGroup.addCompoundType("drillholeObservation",sizeof(DrillholeObservation));
-        drillholeObservationType.addMember("eventId",netCDF::ncInt,offsetof(DrillholeObservation, eventId));
-        drillholeObservationType.addMember("easting",netCDF::ncDouble,offsetof(DrillholeObservation, easting));
-        drillholeObservationType.addMember("northing",netCDF::ncDouble,offsetof(DrillholeObservation, northing));
-        drillholeObservationType.addMember("altitude",netCDF::ncDouble,offsetof(DrillholeObservation, altitude));
+        drillholeObservationType.addMember("collarId",netCDF::ncInt,offsetof(DrillholeObservation, eventId));
+        drillholeObservationType.addMember("fromEasting",netCDF::ncDouble,offsetof(DrillholeObservation, easting));
+        drillholeObservationType.addMember("fromNorthing",netCDF::ncDouble,offsetof(DrillholeObservation, northing));
+        drillholeObservationType.addMember("fromAltitude",netCDF::ncDouble,offsetof(DrillholeObservation, altitude));
         drillholeObservationType.addMember("type",netCDF::ncInt,offsetof(DrillholeObservation, type));
-        drillholeObservationType.addMember("baseEasting",netCDF::ncDouble,offsetof(DrillholeObservation, baseEasting));
-        drillholeObservationType.addMember("baseNorthing",netCDF::ncDouble,offsetof(DrillholeObservation, baseNorthing));
-        drillholeObservationType.addMember("baseAltitude",netCDF::ncDouble,offsetof(DrillholeObservation, baseAltitude));
-        drillholeObservationType.addMember("beddingDip",netCDF::ncDouble,offsetof(DrillholeObservation, dip));
-        drillholeObservationType.addMember("beddingAzimuth",netCDF::ncDouble,offsetof(DrillholeObservation, dipdir));
-        drillholeGroup.addVar("drillholeObservations",drillholeObservationType,drillholeIndex);
+        drillholeObservationType.addMember("toEasting",netCDF::ncDouble,offsetof(DrillholeObservation, toEasting));
+        drillholeObservationType.addMember("toNorthing",netCDF::ncDouble,offsetof(DrillholeObservation, toNorthing));
+        drillholeObservationType.addMember("toAltitude",netCDF::ncDouble,offsetof(DrillholeObservation, toAltitude));
+        drillholeObservationType.addMember("from",netCDF::ncDouble,offsetof(DrillholeObservation, from));
+        drillholeObservationType.addMember("to",netCDF::ncDouble,offsetof(DrillholeObservation, to));
+        drillholeObservationType.addMember("propertyCode",netCDF::ncChar,offsetof(DrillholeObservation, propertyCode),drillholePropertyCodeLength);
+        drillholeObservationType.addMember("property1",netCDF::ncChar,offsetof(DrillholeObservation, property1),drillholeProperty1Length);
+        drillholeObservationType.addMember("property2",netCDF::ncChar,offsetof(DrillholeObservation, property2),drillholeProperty2Length);
+        drillholeObservationType.addMember("unit",netCDF::ncChar,offsetof(DrillholeObservation, unit),drillholeUnitLength);
+        drillholeGroup.addVar("drillholeObservations",drillholeObservationType,drillholeObservationIndex);
+
+        // Create drillhole property compound type and variable
+        netCDF::NcCompoundType drillholePropertyType = drillholeGroup.addCompoundType("drillholeProperty",sizeof(DrillholeProperty));
+        drillholePropertyType.addMember("collarId",netCDF::ncInt,offsetof(DrillholeProperty, collarId));
+        drillholePropertyType.addMember("propertyName",netCDF::ncChar,offsetof(DrillholeProperty, propertyName));
+        drillholePropertyType.addMember("propertyValue",netCDF::ncChar,offsetof(DrillholeProperty, propertyValue));
+        drillholeGroup.addVar("drillholeProperties",drillholePropertyType,drillholePropertyIndex);
+
+        // Create drillhole property compound type and variable
+        netCDF::NcCompoundType drillholeSurveyType = drillholeGroup.addCompoundType("drillholeSurvey",sizeof(DrillholeSurvey));
+        drillholeSurveyType.addMember("collarId",netCDF::ncInt,offsetof(DrillholeSurvey, collarId));
+        drillholeSurveyType.addMember("depth",netCDF::ncDouble,offsetof(DrillholeSurvey, depth));
+        drillholeSurveyType.addMember("angle1",netCDF::ncDouble,offsetof(DrillholeSurvey, angle1));
+        drillholeSurveyType.addMember("angle2",netCDF::ncDouble,offsetof(DrillholeSurvey, angle2));
+        drillholeSurveyType.addMember("unit",netCDF::ncChar,offsetof(DrillholeSurvey, unit), drillholeSurveyUnitLength);
+        drillholeGroup.addVar("drillholeSurveys",drillholeSurveyType,drillholeSurveyIndex);
+
     } catch (netCDF::exceptions::NcException& e) {
         if (verbose) std::cout << e.what() << std::endl;
         resp = createErrorMsg(1,"Failed to create Data Collection Group Drillholes",verbose);
@@ -312,11 +342,59 @@ LoopProjectFileResponse DataCollection::GetDrillholeObservations(netCDF::NcGroup
         if (dcGroups.find("Drillholes") != dcGroups.end()) {
             netCDF::NcGroup drillholeGroup = dataCollectionGroup.getGroup("Drillholes");
             netCDF::NcVar drillholeObs = drillholeGroup.getVar("drillholeObservations");
-            for (size_t i=0;i<drillholeGroup.getDim("index").getSize();i++) {
+            for (size_t i=0;i<drillholeGroup.getDim("drillholeObservationIndex").getSize();i++) {
                 DrillholeObservation obs;
                 std::vector<size_t> start; start.push_back(i);
                 drillholeObs.getVar(start,&obs);
                 observations.push_back(obs);
+            }
+        } else {
+            resp = createErrorMsg(1,"No Drillholes Group Node Present",verbose);
+        }
+    } else {
+        resp = createErrorMsg(1,"No Data Collection Group Node Present",verbose);
+    }
+    return resp;
+}
+LoopProjectFileResponse DataCollection::GetDrillholeProperties(netCDF::NcGroup* rootNode, std::vector<DrillholeProperty>& properties, bool verbose)
+{
+    LoopProjectFileResponse resp = {0,""};
+    auto groups = rootNode->getGroups();
+    if (groups.find("DataCollection") != groups.end()) {
+        netCDF::NcGroup dataCollectionGroup = rootNode->getGroup("DataCollection");
+        auto dcGroups = dataCollectionGroup.getGroups();
+        if (dcGroups.find("Drillholes") != dcGroups.end()) {
+            netCDF::NcGroup drillholeGroup = dataCollectionGroup.getGroup("Drillholes");
+            netCDF::NcVar drillholeProp = drillholeGroup.getVar("drillholeProperties");
+            for (size_t i=0;i<drillholeGroup.getDim("drillholePropertyIndex").getSize();i++) {
+                DrillholeProperty prop;
+                std::vector<size_t> start; start.push_back(i);
+                drillholeProp.getVar(start,&prop);
+                properties.push_back(prop);
+            }
+        } else {
+            resp = createErrorMsg(1,"No Drillholes Group Node Present",verbose);
+        }
+    } else {
+        resp = createErrorMsg(1,"No Data Collection Group Node Present",verbose);
+    }
+    return resp;
+}
+LoopProjectFileResponse DataCollection::GetDrillholeSurveys(netCDF::NcGroup* rootNode, std::vector<DrillholeSurvey>& surveys, bool verbose)
+{
+    LoopProjectFileResponse resp = {0,""};
+    auto groups = rootNode->getGroups();
+    if (groups.find("DataCollection") != groups.end()) {
+        netCDF::NcGroup dataCollectionGroup = rootNode->getGroup("DataCollection");
+        auto dcGroups = dataCollectionGroup.getGroups();
+        if (dcGroups.find("Drillholes") != dcGroups.end()) {
+            netCDF::NcGroup drillholeGroup = dataCollectionGroup.getGroup("Drillholes");
+            netCDF::NcVar drillholeSurveys = drillholeGroup.getVar("drillholeSurveys");
+            for (size_t i=0;i<drillholeGroup.getDim("drillholeSurveyIndex").getSize();i++) {
+                DrillholeSurvey survey;
+                std::vector<size_t> start; start.push_back(i);
+                drillholeSurveys.getVar(start,&survey);
+                surveys.push_back(survey);
             }
         } else {
             resp = createErrorMsg(1,"No Drillholes Group Node Present",verbose);
@@ -551,6 +629,54 @@ LoopProjectFileResponse DataCollection::SetDrillholeObservations(netCDF::NcGroup
         std::vector<size_t> count; count.push_back(observations.size());
         netCDF::NcVar drillholeObs = observationGroup.getVar("drillholeObservations");
         drillholeObs.putVar(start,count,&(observations[0]));
+    } catch (netCDF::exceptions::NcException &e) {
+        std::cout << e.what();
+        resp = createErrorMsg(1,"Failed to add drillhole data to loop project file",verbose);
+    }
+    return resp;
+}
+LoopProjectFileResponse DataCollection::SetDrillholeProperties(netCDF::NcGroup* rootNode, std::vector<DrillholeProperty> properties, bool verbose)
+{
+    LoopProjectFileResponse resp = {0,""};
+    try {
+        auto groups = rootNode->getGroups();
+        if (groups.find("DataCollection") == groups.end()) {
+            rootNode->addGroup("DataCollection");
+        }
+        netCDF::NcGroup dataCollectionGroup = rootNode->getGroup("DataCollection");
+        auto dcGroups = dataCollectionGroup.getGroups();
+        if (dcGroups.find("Drillholes") == dcGroups.end()) {
+            resp = CreateDrillholeGroup(&dataCollectionGroup);
+        }
+        netCDF::NcGroup observationGroup = dataCollectionGroup.getGroup("Drillholes");
+        std::vector<size_t> start; start.push_back(0);
+        std::vector<size_t> count; count.push_back(properties.size());
+        netCDF::NcVar drillholeProperties = observationGroup.getVar("drillholeProperties");
+        drillholeProperties.putVar(start,count,&(properties[0]));
+    } catch (netCDF::exceptions::NcException &e) {
+        std::cout << e.what();
+        resp = createErrorMsg(1,"Failed to add drillhole data to loop project file",verbose);
+    }
+    return resp;
+}
+LoopProjectFileResponse DataCollection::SetDrillholeSurveys(netCDF::NcGroup* rootNode, std::vector<DrillholeSurvey> surveys, bool verbose)
+{
+    LoopProjectFileResponse resp = {0,""};
+    try {
+        auto groups = rootNode->getGroups();
+        if (groups.find("DataCollection") == groups.end()) {
+            rootNode->addGroup("DataCollection");
+        }
+        netCDF::NcGroup dataCollectionGroup = rootNode->getGroup("DataCollection");
+        auto dcGroups = dataCollectionGroup.getGroups();
+        if (dcGroups.find("Drillholes") == dcGroups.end()) {
+            resp = CreateDrillholeGroup(&dataCollectionGroup);
+        }
+        netCDF::NcGroup observationGroup = dataCollectionGroup.getGroup("Drillholes");
+        std::vector<size_t> start; start.push_back(0);
+        std::vector<size_t> count; count.push_back(surveys.size());
+        netCDF::NcVar drillholeSurveys = observationGroup.getVar("drillholeSurveys");
+        drillholeSurveys.putVar(start,count,&(surveys[0]));
     } catch (netCDF::exceptions::NcException &e) {
         std::cout << e.what();
         resp = createErrorMsg(1,"Failed to add drillhole data to loop project file",verbose);

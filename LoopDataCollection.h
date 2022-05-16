@@ -8,6 +8,13 @@
 
 #define LOOP_FOLIATION_NAME_LENGTH 30
 #define LOOP_WHAT_IS_FOLDED_NAME_LENGTH 30
+#define LOOP_DRILLHOLE_PROPERTY_CODE_LENGTH 30
+#define LOOP_DRILLHOLE_PROPERTY1_LENGTH 30
+#define LOOP_DRILLHOLE_PROPERTY2_LENGTH 30
+#define LOOP_DRILLHOLE_UNIT_LENGTH 30
+#define LOOP_DRILLHOLE_PROPERTY_NAME_LENGTH 30
+#define LOOP_DRILLHOLE_PROPERTY_VALUE_LENGTH 80
+#define LOOP_DRILLHOLE_SURVEY_UNIT_LENGTH 80
 
 
 namespace LoopProjectFile {
@@ -213,19 +220,55 @@ struct ContactObservation : public Observation {
 
 /*! \brief A structure describing a single drillhole observation */
 struct DrillholeObservation : public Observation {
-    double baseEasting;
-    double baseNorthing;
-    double baseAltitude;
-    double dip;
-    double dipdir;
+    double toEasting;
+    double toNorthing;
+    double toAltitude;
+    double from;
+    double to;
+    char propertyCode[LOOP_DRILLHOLE_PROPERTY_CODE_LENGTH];
+    char property1[LOOP_DRILLHOLE_PROPERTY1_LENGTH];
+    char property2[LOOP_DRILLHOLE_PROPERTY2_LENGTH];
+    char unit[LOOP_DRILLHOLE_UNIT_LENGTH];
     DrillholeObservation() : Observation() {
         type = DRILLHOLEOBSERVATION;
-        baseEasting = 0;
-        baseNorthing = 0;
-        baseAltitude = 0;
-        dip = 0;
-        dipdir = 0;
+        toEasting = 0;
+        toNorthing = 0;
+        toAltitude = 0;
+        from = 0;
+        to = 0;
+        for (auto i=0;i<LOOP_DRILLHOLE_PROPERTY_CODE_LENGTH;i++) propertyCode[i] = 0;
+        for (auto i=0;i<LOOP_DRILLHOLE_PROPERTY1_LENGTH;i++) property1[i] = 0;
+        for (auto i=0;i<LOOP_DRILLHOLE_PROPERTY2_LENGTH;i++) property2[i] = 0;
+        for (auto i=0;i<LOOP_DRILLHOLE_UNIT_LENGTH;i++) unit[i] = 0;
     }
+};
+
+/*! \brief A structure describing a single drillhole property */
+struct DrillholeProperty {
+    double collarId;
+    char propertyName[LOOP_DRILLHOLE_PROPERTY_NAME_LENGTH];
+    char propertyValue[LOOP_DRILLHOLE_PROPERTY_VALUE_LENGTH];
+    DrillholeProperty() {
+        collarId = 0;
+        for (auto i=0;i<LOOP_DRILLHOLE_PROPERTY_NAME_LENGTH;i++) propertyName[i] = 0;
+        for (auto i=0;i<LOOP_DRILLHOLE_PROPERTY_VALUE_LENGTH;i++) propertyValue[i] = 0;
+    } 
+};
+
+/*! \brief A structure describing a single drillhole survey observation */
+struct DrillholeSurvey {
+    double collarId;
+    double depth;
+    double angle1;
+    double angle2;
+    char unit[LOOP_DRILLHOLE_SURVEY_UNIT_LENGTH];
+    DrillholeSurvey() {
+        collarId = 0;
+        depth = 0;
+        angle1 = 0;
+        angle2 = 0;
+        for (auto i=0;i<LOOP_DRILLHOLE_SURVEY_UNIT_LENGTH;i++) unit[i] = 0;
+    } 
 };
 
 namespace DataCollection {
@@ -349,6 +392,28 @@ LoopProjectFileResponse GetContactObservations(netCDF::NcGroup* rootNode, std::v
 LoopProjectFileResponse GetDrillholeObservations(netCDF::NcGroup* rootNode, std::vector<DrillholeObservation>& observations, bool verbose=false);
 
 /*!
+ * \brief Retrieves drillhole property data from the loop project file
+ *
+ * \param rootNode - the rootNode of the netCDF Loop project file
+ * \param properties - a reference to where the propertu data is to be copied 
+ * \param verbose - a flag to toggle verbose message printing
+ *
+ * \return Response with success/fail of observation data retrieval with an error message if it failed
+ */
+LoopProjectFileResponse GetDrillholeProperties(netCDF::NcGroup* rootNode, std::vector<DrillholeProperty>& properties, bool verbose=false);
+
+/*!
+ * \brief Retrieves drillhole survey data from the loop project file
+ *
+ * \param rootNode - the rootNode of the netCDF Loop project file
+ * \param surveys - a reference to where the survey data is to be copied 
+ * \param verbose - a flag to toggle verbose message printing
+ *
+ * \return Response with success/fail of observation data retrieval with an error message if it failed
+ */
+LoopProjectFileResponse GetDrillholeSurveys(netCDF::NcGroup* rootNode, std::vector<DrillholeSurvey>& surveys, bool verbose=false);
+
+/*!
  * \brief Retrieves data collection configuration from the loop project file
  *
  * \param rootNode - the rootNode of the netCDF Loop project file
@@ -446,6 +511,28 @@ LoopProjectFileResponse SetContactObservations(netCDF::NcGroup* rootNode, std::v
  * \return Response with success/fail of observation data insertion with an error message if it failed
  */
 LoopProjectFileResponse SetDrillholeObservations(netCDF::NcGroup* rootNode, std::vector<DrillholeObservation> observations, bool verbose=false);
+
+/*!
+ * \brief Sets drillhole property data to the loop project file
+ *
+ * \param rootNode - the rootNode of the netCDF Loop project file
+ * \param properties - the property data to be inserted 
+ * \param verbose - a flag to toggle verbose message printing
+ *
+ * \return Response with success/fail of observation data insertion with an error message if it failed
+ */
+LoopProjectFileResponse SetDrillholeProperties(netCDF::NcGroup* rootNode, std::vector<DrillholeProperty> properties, bool verbose=false);
+
+/*!
+ * \brief Sets drillhole survey data to the loop project file
+ *
+ * \param rootNode - the rootNode of the netCDF Loop project file
+ * \param surveys - the survey data to be inserted 
+ * \param verbose - a flag to toggle verbose message printing
+ *
+ * \return Response with success/fail of observation data insertion with an error message if it failed
+ */
+LoopProjectFileResponse SetDrillholeSurveys(netCDF::NcGroup* rootNode, std::vector<DrillholeSurvey> surveys, bool verbose=false);
 
 /*!
  * \brief Sets data collection configuration to the loop project file

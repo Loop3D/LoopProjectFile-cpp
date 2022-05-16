@@ -99,6 +99,8 @@ LoopProjectFileResponse GetDiscontinuityObservations(std::string filename, std::
 LoopProjectFileResponse GetStratigraphicObservations(std::string filename, std::vector<StratigraphicObservation> &data, bool verbose=false);
 LoopProjectFileResponse GetContacts(std::string filename, std::vector<ContactObservation> &data, bool verbose=false);
 LoopProjectFileResponse GetDrillholeObservations(std::string filename, std::vector<DrillholeObservation> &data, bool verbose=false);
+LoopProjectFileResponse GetDrillholeProperties(std::string filename, std::vector<DrillholeProperty> &data, bool verbose=false);
+LoopProjectFileResponse GetDrillholeSurveys(std::string filename, std::vector<DrillholeSurvey> &data, bool verbose=false);
 LoopProjectFileResponse GetFaultEvents(std::string filename, std::vector<FaultEvent> &data, bool verbose=false);
 LoopProjectFileResponse GetFoldEvents(std::string filename, std::vector<FoldEvent> &data, bool verbose=false);
 LoopProjectFileResponse GetFoliationEvents(std::string filename, std::vector<FoliationEvent> &data, bool verbose=false);
@@ -146,6 +148,8 @@ LoopProjectFileResponse SetDiscontinuityObservations(std::string filename, std::
 LoopProjectFileResponse SetStratigraphicObservations(std::string filename, std::vector<StratigraphicObservation> data, bool verbose=false);
 LoopProjectFileResponse SetContacts(std::string filename, std::vector<ContactObservation> data, bool verbose=false);
 LoopProjectFileResponse SetDrillholeObservations(std::string filename, std::vector<DrillholeObservation> data, bool verbose=false);
+LoopProjectFileResponse SetDrillholeProperties(std::string filename, std::vector<DrillholeProperty> data, bool verbose=false);
+LoopProjectFileResponse SetDrillholeSurveys(std::string filename, std::vector<DrillholeSurvey> data, bool verbose=false);
 LoopProjectFileResponse SetFaultEvents(std::string filename, std::vector<FaultEvent> data, bool verbose=false);
 LoopProjectFileResponse SetFoldEvents(std::string filename, std::vector<FoldEvent> data, bool verbose=false);
 LoopProjectFileResponse SetFoliationEvents(std::string filename, std::vector<FoliationEvent> data, bool verbose=false);

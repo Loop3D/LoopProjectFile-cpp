@@ -177,6 +177,16 @@ LoopProjectFileResponse GetDrillholeObservations(std::string filename, std::vect
     LPF_OPEN_RUN(filename, DataCollection::GetDrillholeObservations, data, true, verbose);
 }
 
+LoopProjectFileResponse GetDrillholeProperites(std::string filename, std::vector<DrillholeProperty> &data, bool verbose)
+{
+    LPF_OPEN_RUN(filename, DataCollection::GetDrillholeProperties, data, true, verbose);
+}
+
+LoopProjectFileResponse GetDrillholeSurveys(std::string filename, std::vector<DrillholeSurvey> &data, bool verbose)
+{
+    LPF_OPEN_RUN(filename, DataCollection::GetDrillholeSurveys, data, true, verbose);
+}
+
 LoopProjectFileResponse GetFaultEvents(std::string filename, std::vector<FaultEvent> &data, bool verbose)
 {
     LPF_OPEN_RUN(filename, ExtractedInformation::GetFaultEvents, data, true, verbose);
@@ -280,6 +290,16 @@ LoopProjectFileResponse SetContacts(std::string filename, std::vector<ContactObs
 LoopProjectFileResponse SetDrillholeObservations(std::string filename, std::vector<DrillholeObservation> data, bool verbose)
 {
     LPF_OPEN_RUN(filename, DataCollection::SetDrillholeObservations, data, false, verbose);
+}
+
+LoopProjectFileResponse SetDrillholeProperties(std::string filename, std::vector<DrillholeProperty> data, bool verbose)
+{
+    LPF_OPEN_RUN(filename, DataCollection::SetDrillholeProperties, data, false, verbose);
+}
+
+LoopProjectFileResponse SetDrillholeSurveys(std::string filename, std::vector<DrillholeSurvey> data, bool verbose)
+{
+    LPF_OPEN_RUN(filename, DataCollection::SetDrillholeSurveys, data, false, verbose);
 }
 
 LoopProjectFileResponse SetFaultEvents(std::string filename, std::vector<FaultEvent> data, bool verbose)
