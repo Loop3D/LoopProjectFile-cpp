@@ -694,23 +694,23 @@ LoopProjectFileResponse DataCollection::SetDataCollectionConfiguration(netCDF::N
         }
         netCDF::NcGroup dataCollectionGroup = rootNode->getGroup("DataCollection");
         dataCollectionGroup.putAtt("quietMode",netCDF::ncInt,configuration.quietMode);
-        dataCollectionGroup.putAtt("deposits",netCDF::ncChar,30,configuration.deposits);
-        dataCollectionGroup.putAtt("dtb",netCDF::ncChar,30,configuration.dtb);
+        dataCollectionGroup.putAtt("deposits",netCDF::ncChar,LOOP_CONFIGURATION_DEFAULT_STRING_LENGTH,configuration.deposits);
+        dataCollectionGroup.putAtt("dtb",netCDF::ncChar,LOOP_CONFIGURATION_DEFAULT_STRING_LENGTH,configuration.dtb);
         dataCollectionGroup.putAtt("orientationDecimate",netCDF::ncInt,configuration.orientationDecimate);
         dataCollectionGroup.putAtt("contactDecimate",netCDF::ncInt,configuration.contactDecimate);
         dataCollectionGroup.putAtt("intrusionMode",netCDF::ncInt,configuration.intrusionMode);
         dataCollectionGroup.putAtt("interpolationSpacing",netCDF::ncInt,configuration.interpolationSpacing);
         dataCollectionGroup.putAtt("misorientation",netCDF::ncInt,configuration.misorientation);
-        dataCollectionGroup.putAtt("interpolationScheme",netCDF::ncChar,30,configuration.interpolationScheme);
+        dataCollectionGroup.putAtt("interpolationScheme",netCDF::ncChar,120,configuration.interpolationScheme);
         dataCollectionGroup.putAtt("faultDecimate",netCDF::ncInt,configuration.faultDecimate);
         dataCollectionGroup.putAtt("minFaultLength",netCDF::ncDouble,configuration.minFaultLength);
         dataCollectionGroup.putAtt("faultDip",netCDF::ncDouble,configuration.faultDip);
         dataCollectionGroup.putAtt("plutonDip",netCDF::ncDouble,configuration.plutonDip);
-        dataCollectionGroup.putAtt("plutonForm",netCDF::ncChar,30,configuration.plutonForm);
+        dataCollectionGroup.putAtt("plutonForm",netCDF::ncChar,120,configuration.plutonForm);
         dataCollectionGroup.putAtt("distBuffer",netCDF::ncDouble,configuration.distBuffer);
         dataCollectionGroup.putAtt("contactDip",netCDF::ncDouble,configuration.contactDip);
         dataCollectionGroup.putAtt("contactOrientationDecimate",netCDF::ncInt,configuration.contactOrientationDecimate);
-        dataCollectionGroup.putAtt("nullScheme",netCDF::ncChar,30,configuration.nullScheme);
+        dataCollectionGroup.putAtt("nullScheme",netCDF::ncChar,120,configuration.nullScheme);
         dataCollectionGroup.putAtt("thicknessBuffer",netCDF::ncDouble,configuration.thicknessBuffer);
         dataCollectionGroup.putAtt("maxThicknessAllowed",netCDF::ncDouble,configuration.maxThicknessAllowed);
         dataCollectionGroup.putAtt("foldDecimate",netCDF::ncInt,configuration.foldDecimate);
